@@ -73,6 +73,14 @@ const learningData = {
                                 type: "Documentation",
                                 description: "Complete AMD64 architecture specification"
                             }
+                        ],
+                        videos: [
+                            {
+                                title: "Understanding CPU Caches and Memory Hierarchy",
+                                url: "https://www.youtube.com/watch?v=WNjvl7Ku9OQ",
+                                type: "Video",
+                                description: "Deep dive into CPU cache architecture and memory systems"
+                            }
                         ]
                     }
                 },
@@ -97,6 +105,14 @@ const learningData = {
                                 type: "Documentation",
                                 description: "ARM's approach to hardware virtualization support"
                             }
+                        ],
+                        documentation: [
+                            {
+                                title: "Intel Security Features Overview",
+                                url: "https://www.intel.com/content/www/us/en/architecture-and-technology/software-guard-extensions.html",
+                                type: "Documentation",
+                                description: "Hardware security features in modern Intel processors"
+                            }
                         ]
                     }
                 },
@@ -119,6 +135,14 @@ const learningData = {
                                 url: "https://uefi.org/acpi/specs",
                                 type: "Specification", 
                                 description: "Advanced Configuration and Power Interface specification"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "UEFI Boot Process Explained",
+                                url: "https://www.youtube.com/watch?v=zIYkol3Q_QU",
+                                type: "Video",
+                                description: "Understanding the UEFI boot sequence and secure boot"
                             }
                         ]
                     }
@@ -144,6 +168,14 @@ const learningData = {
                                 type: "Technical Document",
                                 description: "JEDEC standard for DDR5 SDRAM"
                             }
+                        ],
+                        videos: [
+                            {
+                                title: "Memory Technologies: DDR4 vs DDR5",
+                                url: "https://www.youtube.com/watch?v=15YkbE_Eo5U",
+                                type: "Video",
+                                description: "Comparison of memory technologies and performance characteristics"
+                            }
                         ]
                     }
                 },
@@ -166,6 +198,14 @@ const learningData = {
                                 url: "https://pcisig.com/specifications",
                                 type: "Specification",
                                 description: "Latest PCIe specification with enhanced features"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "CXL: The Future of Memory and Storage",
+                                url: "https://www.youtube.com/watch?v=bKg_5LtZE6E",
+                                type: "Conference Talk",
+                                description: "Overview of CXL technology and its impact on data center architecture"
                             }
                         ]
                     }
@@ -190,6 +230,14 @@ const learningData = {
                                 type: "Book Series",
                                 description: "Collection of GPU programming techniques and optimizations"
                             }
+                        ],
+                        videos: [
+                            {
+                                title: "GPU Architecture Deep Dive",
+                                url: "https://www.youtube.com/watch?v=3l10o0DYJXg",
+                                type: "Technical Presentation",
+                                description: "Detailed explanation of modern GPU architecture and compute capabilities"
+                            }
                         ]
                     }
                 },
@@ -212,6 +260,14 @@ const learningData = {
                                 url: "https://habana.ai/products/gaudi2/",
                                 type: "Product Overview",
                                 description: "Intel's purpose-built AI training accelerator"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "AI Hardware Revolution: From GPUs to Custom Silicon",
+                                url: "https://www.youtube.com/watch?v=oBklltKhb8o",
+                                type: "Conference Talk",
+                                description: "Evolution of AI hardware and future trends"
                             }
                         ]
                     }
@@ -236,6 +292,14 @@ const learningData = {
                                 type: "Industry Standards",
                                 description: "Semiconductor manufacturing equipment and materials standards"
                             }
+                        ],
+                        videos: [
+                            {
+                                title: "Semiconductor Manufacturing Process",
+                                url: "https://www.youtube.com/watch?v=AMagKZs0bnI",
+                                type: "Educational Video",
+                                description: "Step-by-step overview of chip manufacturing"
+                            }
                         ]
                     }
                 },
@@ -259,6 +323,14 @@ const learningData = {
                                 type: "Research Paper",
                                 description: "Techniques for post-silicon debugging and validation"
                             }
+                        ],
+                        documentation: [
+                            {
+                                title: "Hardware Validation Best Practices",
+                                url: "https://www.synopsys.com/verification/static-and-formal-verification/hardware-validation.html",
+                                type: "Technical Resource",
+                                description: "Industry best practices for hardware validation and verification"
+                            }
                         ]
                     }
                 },
@@ -281,6 +353,14 @@ const learningData = {
                                 url: "https://www.opencompute.org/projects",
                                 type: "Open Standards",
                                 description: "Community-driven hardware design specifications"
+                            }
+                        ],
+                        documentation: [
+                            {
+                                title: "AMD Partner Hub Resources",
+                                url: "https://www.amd.com/en/partner",
+                                type: "Partnership Resources",
+                                description: "AMD's partner enablement and collaboration tools"
                             }
                         ]
                     }
@@ -306,6 +386,14 @@ const learningData = {
                                 url: "https://docs.microsoft.com/en-us/azure/",
                                 type: "Documentation",
                                 description: "Microsoft's approach to cloud hardware optimization"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "Azure Infrastructure Innovation",
+                                url: "https://www.youtube.com/watch?v=69PrhWQorEM",
+                                type: "Conference Presentation",
+                                description: "Microsoft's vision for next-generation cloud infrastructure"
                             }
                         ]
                     }
@@ -338,6 +426,14 @@ const learningData = {
                                 type: "Tutorial",
                                 description: "Introduction to virtualization concepts and benefits"
                             }
+                        ],
+                        videos: [
+                            {
+                                title: "Virtualization Explained",
+                                url: "https://www.youtube.com/watch?v=FZR0rG3HKIk",
+                                type: "Educational Video",
+                                description: "Clear explanation of virtualization fundamentals and use cases"
+                            }
                         ]
                     }
                 },
@@ -346,20 +442,28 @@ const learningData = {
                     name: "Hypervisor Architecture",
                     x: 750, y: 150,
                     prerequisites: ["virt-basics"],
-                    description: "Type 1 and Type 2 hypervisors, VMM design principles, and performance considerations",
+                    description: "Type 1 vs Type 2 hypervisors, microkernels, and hypervisor design principles",
                     resources: {
                         primary: [
                             { 
                                 title: "Xen and the Art of Virtualization", 
                                 url: "https://www.cl.cam.ac.uk/research/srg/netos/papers/2003-xensosp.pdf",
                                 type: "Research Paper",
-                                description: "Seminal paper on paravirtualization techniques"
+                                description: "Seminal paper on paravirtualization and Xen hypervisor design"
                             },
                             { 
-                                title: "VMware ESX Server Architecture", 
+                                title: "VMware ESX Architecture", 
                                 url: "https://www.vmware.com/pdf/esx_architecture.pdf",
-                                type: "Technical Paper",
-                                description: "Deep dive into VMware's hypervisor architecture"
+                                type: "Technical Whitepaper",
+                                description: "Detailed architecture of VMware's ESX hypervisor"
+                            }
+                        ],
+                        documentation: [
+                            {
+                                title: "KVM Architecture Overview",
+                                url: "https://www.linux-kvm.org/page/KvmArchitecture",
+                                type: "Documentation",
+                                description: "Linux KVM hypervisor architecture and implementation"
                             }
                         ]
                     }
@@ -370,20 +474,28 @@ const learningData = {
                     x: 550, y: 250,
                     prerequisites: ["hypervisor-arch"],
                     intersections: ["modern-cpu"],
-                    description: "Hardware-assisted virtualization, VT-x/AMD-V, and CPU virtualization techniques",
+                    description: "Hardware-assisted virtualization, trap-and-emulate, and CPU virtualization techniques",
                     resources: {
                         primary: [
                             { 
-                                title: "Intel VT-x Technology Overview", 
+                                title: "Intel VT-x Technology Guide", 
                                 url: "https://www.intel.com/content/www/us/en/virtualization/virtualization-technology/intel-virtualization-technology.html",
                                 type: "Technical Guide",
-                                description: "Comprehensive guide to Intel's hardware virtualization"
+                                description: "Comprehensive guide to Intel's hardware virtualization technology"
                             },
                             { 
                                 title: "AMD-V (SVM) Documentation", 
                                 url: "https://www.amd.com/system/files/TechDocs/33047.pdf",
-                                type: "Specification",
-                                description: "AMD's Secure Virtual Machine technology specification"
+                                type: "Technical Manual",
+                                description: "AMD's Secure Virtual Machine architecture specification"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "Hardware-Assisted Virtualization Deep Dive",
+                                url: "https://www.youtube.com/watch?v=oBklltKhb8o",
+                                type: "Technical Presentation",
+                                description: "How modern CPUs enable efficient virtualization"
                             }
                         ]
                     }
@@ -394,20 +506,28 @@ const learningData = {
                     x: 700, y: 250,
                     prerequisites: ["cpu-virtualization"],
                     intersections: ["memory-systems"],
-                    description: "Shadow page tables, EPT/NPT, and memory management in virtualized environments",
+                    description: "Virtual memory management, shadow page tables, and hardware memory virtualization",
                     resources: {
                         primary: [
                             { 
                                 title: "Intel EPT (Extended Page Tables)", 
                                 url: "https://software.intel.com/content/www/us/en/develop/articles/intel-virtualization-technology-for-directed-io-vt-d-enhancing-intel-platforms-for-efficient-virtualization-of-io-devices.html",
-                                type: "Technical Guide",
-                                description: "Hardware-assisted memory virtualization with EPT"
+                                type: "Technical Documentation",
+                                description: "Intel's hardware-assisted memory virtualization technology"
                             },
                             { 
                                 title: "AMD NPT (Nested Page Tables)", 
                                 url: "https://developer.amd.com/wordpress/media/2012/10/NPT-WP-1%201-final-TM.pdf",
-                                type: "Whitepaper",
+                                type: "Technical Whitepaper",
                                 description: "AMD's approach to hardware memory virtualization"
+                            }
+                        ],
+                        documentation: [
+                            {
+                                title: "Memory Virtualization in Modern Hypervisors",
+                                url: "https://www.usenix.org/system/files/conference/osdi10/osdi10-ben-yehuda.pdf",
+                                type: "Research Paper",
+                                description: "Comparative study of memory virtualization techniques"
                             }
                         ]
                     }
@@ -417,20 +537,28 @@ const learningData = {
                     name: "I/O Virtualization",
                     x: 850, y: 250,
                     prerequisites: ["memory-virtualization"],
-                    description: "Device emulation, paravirtualized drivers, SR-IOV, and IOMMU technologies",
+                    description: "Device virtualization, SR-IOV, IOMMU, and I/O performance optimization",
                     resources: {
                         primary: [
                             { 
-                                title: "SR-IOV Technology Brief", 
+                                title: "SR-IOV Specification", 
                                 url: "https://pcisig.com/single-root-io-virtualization-sr-iov",
-                                type: "Technical Brief",
-                                description: "Single Root I/O Virtualization specification overview"
+                                type: "Industry Specification",
+                                description: "Single Root I/O Virtualization standard for PCIe devices"
                             },
                             { 
                                 title: "Intel VT-d (Virtualization Technology for Directed I/O)", 
                                 url: "https://software.intel.com/content/www/us/en/develop/articles/intel-virtualization-technology-for-directed-io-vt-d-enhancing-intel-platforms-for-efficient-virtualization-of-io-devices.html",
-                                type: "Documentation",
-                                description: "Hardware-assisted I/O virtualization technology"
+                                type: "Technical Guide",
+                                description: "Intel's I/O Memory Management Unit (IOMMU) technology"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "Understanding SR-IOV and I/O Virtualization",
+                                url: "https://www.youtube.com/watch?v=hRHsk8Nycdg",
+                                type: "Technical Tutorial",
+                                description: "Deep dive into I/O virtualization technologies and performance benefits"
                             }
                         ]
                     }
@@ -440,20 +568,28 @@ const learningData = {
                     name: "Hyper-V Architecture",
                     x: 600, y: 350,
                     prerequisites: ["io-virtualization"],
-                    description: "Microsoft Hyper-V design, partitions, VSCs/VSPs, and integration with Windows",
+                    description: "Microsoft Hyper-V hypervisor architecture, partitions, and virtual machine management",
                     resources: {
                         primary: [
                             { 
-                                title: "Windows Internals - Hyper-V", 
+                                title: "Windows Internals - Hyper-V Chapters", 
                                 url: "https://www.amazon.com/Windows-Internals-Part-architecture-management/dp/0735684189",
-                                type: "Book",
-                                description: "Detailed coverage of Hyper-V in Windows Internals"
+                                type: "Technical Book",
+                                description: "Comprehensive coverage of Hyper-V internals and architecture"
                             },
                             { 
-                                title: "Hyper-V Architecture Deep Dive", 
+                                title: "Hyper-V Architecture Overview", 
                                 url: "https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-architecture",
-                                type: "Documentation",
-                                description: "Official Microsoft Hyper-V architecture guide"
+                                type: "Official Documentation",
+                                description: "Microsoft's official Hyper-V architecture documentation"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "Hyper-V Deep Dive",
+                                url: "https://www.youtube.com/watch?v=69PrhWQorEM",
+                                type: "Microsoft Conference Session",
+                                description: "In-depth technical session on Hyper-V architecture and features"
                             }
                         ]
                     }
@@ -463,20 +599,28 @@ const learningData = {
                     name: "Hyper-V Enlightenments",
                     x: 750, y: 350,
                     prerequisites: ["hyperv-arch"],
-                    description: "Paravirtualization interfaces, synthetic devices, and performance optimizations",
+                    description: "Paravirtualization optimizations, synthetic devices, and guest OS integration",
                     resources: {
                         primary: [
                             { 
                                 title: "Hyper-V Top Level Functional Specification", 
                                 url: "https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/reference/tlfs",
-                                type: "Specification",
-                                description: "Complete specification of Hyper-V enlightenments"
+                                type: "Technical Specification",
+                                description: "Complete specification of Hyper-V enlightenments and interfaces"
                             },
                             { 
-                                title: "VMBus Protocol and Architecture", 
+                                title: "VMBus Architecture and Implementation", 
                                 url: "https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/vmbus/",
-                                type: "API Documentation",
-                                description: "VMBus communication protocol for synthetic devices"
+                                type: "Developer Documentation",
+                                description: "Hyper-V VMBus communication channel architecture"
+                            }
+                        ],
+                        documentation: [
+                            {
+                                title: "Hyper-V Integration Services",
+                                url: "https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/manage/manage-hyper-v-integration-services",
+                                type: "Administration Guide",
+                                description: "Managing Hyper-V integration components and services"
                             }
                         ]
                     }
@@ -487,20 +631,28 @@ const learningData = {
                     x: 850, y: 350,
                     prerequisites: ["hyperv-enlightenments"],
                     intersections: ["vbs-arch"],
-                    description: "Root partition integration, kernel mode drivers, and Windows hypervisor interface",
+                    description: "Hyper-V integration with Windows kernel, root partition, and driver architecture",
                     resources: {
                         primary: [
                             { 
                                 title: "Hyper-V Root Partition Architecture", 
                                 url: "https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/reference/hyper-v-architecture",
-                                type: "Architecture Guide",
-                                description: "Windows kernel integration with Hyper-V hypervisor"
+                                type: "Technical Documentation",
+                                description: "Architecture of Hyper-V root partition and management OS"
                             },
                             { 
                                 title: "Windows Driver Model for Virtualization", 
                                 url: "https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/",
                                 type: "Developer Guide",
-                                description: "Driver development in virtualized Windows environments"
+                                description: "Windows kernel driver architecture in virtualized environments"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "Windows Kernel and Hyper-V Integration",
+                                url: "https://www.youtube.com/watch?v=AMagKZs0bnI",
+                                type: "Technical Deep Dive",
+                                description: "How Hyper-V integrates with the Windows kernel architecture"
                             }
                         ]
                     }
@@ -510,20 +662,28 @@ const learningData = {
                     name: "Nested Virtualization Fundamentals",
                     x: 600, y: 450,
                     prerequisites: ["kernel-integration"],
-                    description: "Running hypervisors inside VMs, performance implications, and use cases",
+                    description: "Running hypervisors inside virtual machines, L0/L1/L2 concepts, and performance implications",
                     resources: {
                         primary: [
                             { 
                                 title: "The Turtles Project: Design and Implementation of Nested Virtualization", 
                                 url: "https://www.usenix.org/system/files/conference/osdi10/osdi10-ben-yehuda.pdf",
                                 type: "Research Paper",
-                                description: "Academic research on nested virtualization implementation"
+                                description: "Foundational research on nested virtualization implementation"
                             },
                             { 
                                 title: "Intel Nested Virtualization Support", 
                                 url: "https://software.intel.com/content/www/us/en/develop/articles/intel-virtualization-technology-for-directed-io-vt-d-enhancing-intel-platforms-for-efficient-virtualization-of-io-devices.html",
-                                type: "Technical Guide",
-                                description: "Hardware support for nested virtualization scenarios"
+                                type: "Technical Documentation",
+                                description: "Hardware support for nested virtualization in Intel processors"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "Nested Virtualization: Challenges and Solutions",
+                                url: "https://www.youtube.com/watch?v=oBklltKhb8o",
+                                type: "Academic Presentation",
+                                description: "Technical challenges and solutions in nested virtualization"
                             }
                         ]
                     }
@@ -533,20 +693,28 @@ const learningData = {
                     name: "Nested Virtualization Implementation",
                     x: 750, y: 450,
                     prerequisites: ["nested-virt-fundamentals"],
-                    description: "Implementation challenges, shadow VM controls, and performance optimization",
+                    description: "Production implementation of nested virtualization in Hyper-V, VMware, and KVM",
                     resources: {
                         primary: [
                             { 
                                 title: "Hyper-V Nested Virtualization", 
                                 url: "https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/user-guide/nested-virtualization",
                                 type: "Implementation Guide",
-                                description: "Microsoft's implementation of nested virtualization"
+                                description: "Microsoft's implementation of nested virtualization in Hyper-V"
                             },
                             { 
-                                title: "KVM Nested Virtualization", 
+                                title: "KVM Nested Guests", 
                                 url: "https://www.linux-kvm.org/page/Nested_Guests",
                                 type: "Technical Documentation",
-                                description: "Linux KVM approach to nested virtualization"
+                                description: "KVM's approach to nested virtualization support"
+                            }
+                        ],
+                        documentation: [
+                            {
+                                title: "VMware Nested ESXi Implementation",
+                                url: "https://www.vmware.com/pdf/esx_architecture.pdf",
+                                type: "Technical Whitepaper",
+                                description: "VMware's nested hypervisor architecture and implementation"
                             }
                         ]
                     }
@@ -565,13 +733,21 @@ const learningData = {
                                 title: "Windows Container Architecture", 
                                 url: "https://docs.microsoft.com/en-us/virtualization/windowscontainers/about/",
                                 type: "Architecture Guide",
-                                description: "Microsoft's approach to Windows containerization"
+                                description: "Microsoft's approach to Windows containerization and architecture"
                             },
                             { 
                                 title: "Hyper-V Isolated Containers", 
                                 url: "https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/hyperv-container",
                                 type: "Technical Guide",
                                 description: "Enhanced container isolation using Hyper-V technology"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "Container vs VM: Understanding the Differences",
+                                url: "https://www.youtube.com/watch?v=cjXI-yxqGTI",
+                                type: "Educational Video",
+                                description: "Comparison of container and virtual machine technologies"
                             }
                         ]
                     }
@@ -604,6 +780,14 @@ const learningData = {
                                 type: "Framework",
                                 description: "Industry standard cybersecurity risk management framework"
                             }
+                        ],
+                        videos: [
+                            {
+                                title: "Cybersecurity Fundamentals",
+                                url: "https://www.youtube.com/watch?v=inWWhr5tnEA",
+                                type: "Educational Course",
+                                description: "Introduction to cybersecurity principles and practices"
+                            }
                         ]
                     }
                 },
@@ -612,20 +796,28 @@ const learningData = {
                     name: "Operating System Security",
                     x: 1150, y: 150,
                     prerequisites: ["security-basics"],
-                    description: "OS security models, access control, privilege separation, and kernel security",
+                    description: "OS security models, access control, privilege escalation, and kernel security",
                     resources: {
                         primary: [
                             { 
                                 title: "Windows Security Architecture Overview", 
                                 url: "https://docs.microsoft.com/en-us/windows/security/",
                                 type: "Documentation",
-                                description: "Comprehensive guide to Windows security architecture"
+                                description: "Comprehensive guide to Windows security architecture and features"
                             },
                             { 
-                                title: "Linux Security Subsystem", 
+                                title: "Linux Security and Hardening", 
                                 url: "https://www.kernel.org/doc/html/latest/security/",
                                 type: "Kernel Documentation",
-                                description: "Linux kernel security mechanisms and frameworks"
+                                description: "Linux kernel security subsystems and hardening techniques"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "Operating System Security Models",
+                                url: "https://www.youtube.com/watch?v=WnWvO70MTI4",
+                                type: "Academic Lecture",
+                                description: "Comparison of different OS security architectures and models"
                             }
                         ]
                     }
@@ -635,20 +827,28 @@ const learningData = {
                     name: "Trusted Platform Module",
                     x: 950, y: 250,
                     prerequisites: ["os-security"],
-                    description: "Hardware security module, measured boot, attestation, and key management",
+                    description: "Hardware security modules, measured boot, attestation, and cryptographic services",
                     resources: {
                         primary: [
                             { 
                                 title: "TPM 2.0 Library Specification", 
                                 url: "https://trustedcomputinggroup.org/resource/tpm-library-specification/",
-                                type: "Specification",
-                                description: "Complete TPM 2.0 specification from TCG"
+                                type: "Technical Specification",
+                                description: "Complete TPM 2.0 specification from Trusted Computing Group"
                             },
                             { 
-                                title: "Windows TPM Platform Crypto Provider", 
+                                title: "Windows TPM Integration and BitLocker", 
                                 url: "https://docs.microsoft.com/en-us/windows/security/information-protection/tpm/",
                                 type: "Implementation Guide",
-                                description: "Windows integration with TPM for security services"
+                                description: "How Windows integrates with TPM for security services"
+                            }
+                        ],
+                        documentation: [
+                            {
+                                title: "TPM-based Attestation",
+                                url: "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-system-guard/system-guard-secure-launch-and-smm-protection",
+                                type: "Technical Documentation",
+                                description: "Using TPM for system attestation and integrity measurement"
                             }
                         ]
                     }
@@ -659,20 +859,28 @@ const learningData = {
                     x: 1100, y: 250,
                     prerequisites: ["tpm"],
                     intersections: ["modern-cpu"],
-                    description: "CPU security extensions, TXT, TrustZone, and hardware root of trust",
+                    description: "Hardware-based security primitives, secure boot, and trusted execution environments",
                     resources: {
                         primary: [
                             { 
                                 title: "Intel Trusted Execution Technology (TXT)", 
                                 url: "https://www.intel.com/content/www/us/en/architecture-and-technology/trusted-execution-technology/",
                                 type: "Technology Overview",
-                                description: "Intel's hardware-based security technology"
+                                description: "Intel's hardware-based trusted platform technology"
                             },
                             { 
-                                title: "ARM TrustZone Architecture", 
+                                title: "ARM TrustZone Technology", 
                                 url: "https://developer.arm.com/ip-products/security-ip/trustzone",
-                                type: "Architecture Guide",
-                                description: "ARM's system-wide approach to security"
+                                type: "Technical Documentation",
+                                description: "ARM's approach to hardware security and trusted execution"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "Hardware Security Features in Modern Processors",
+                                url: "https://www.youtube.com/watch?v=69PrhWQorEM",
+                                type: "Technical Presentation",
+                                description: "Overview of hardware security features across different processor architectures"
                             }
                         ]
                     }
@@ -683,20 +891,28 @@ const learningData = {
                     x: 1250, y: 250,
                     prerequisites: ["hw-security"],
                     intersections: ["hypervisor-arch"],
-                    description: "Hypervisor attack surface, VM isolation, and security boundary enforcement",
+                    description: "Hypervisor attack surfaces, VM escape vulnerabilities, and hypervisor hardening",
                     resources: {
                         primary: [
                             { 
-                                title: "A Security Analysis of the Xen Hypervisor", 
+                                title: "Hypervisor Security Research", 
                                 url: "https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-li.pdf",
-                                type: "Security Research",
-                                description: "Academic analysis of hypervisor security properties"
+                                type: "Academic Research",
+                                description: "Comprehensive analysis of hypervisor security vulnerabilities"
                             },
                             { 
-                                title: "Breaking the Hypervisor: Fault Injection Attacks", 
+                                title: "VM Escape Techniques and Mitigations", 
                                 url: "https://www.blackhat.com/docs/us-17/wednesday/us-17-Mandal-Fractured-Backbone-Breaking-Modern-OS-Defenses-With-Firmware-Attacks.pdf",
                                 type: "Security Research",
-                                description: "Real-world hypervisor attack techniques and mitigations"
+                                description: "Analysis of virtual machine escape techniques and defenses"
+                            }
+                        ],
+                        documentation: [
+                            {
+                                title: "Hyper-V Security Best Practices",
+                                url: "https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/best-practices-for-running-windows-on-hyper-v",
+                                type: "Best Practices Guide",
+                                description: "Microsoft's recommendations for securing Hyper-V deployments"
                             }
                         ]
                     }
@@ -707,20 +923,28 @@ const learningData = {
                     x: 1000, y: 350,
                     prerequisites: ["hypervisor-security"],
                     intersections: ["kernel-integration"],
-                    description: "VBS architecture, Virtual Secure Mode, and isolation of security-critical code",
+                    description: "Using hypervisor isolation for OS security, Virtual Secure Mode, and kernel protection",
                     resources: {
                         primary: [
                             { 
-                                title: "Windows Virtualization-Based Security", 
+                                title: "Windows VBS Architecture Deep Dive", 
                                 url: "https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/introduction-to-device-guard-virtualization-based-security-and-windows-defender-application-control",
-                                type: "Architecture Guide",
-                                description: "Microsoft's VBS implementation and security benefits"
+                                type: "Technical Documentation",
+                                description: "Complete guide to Windows Virtualization-based Security architecture"
                             },
                             { 
                                 title: "Hyper-V Code Integrity (HVCI)", 
                                 url: "https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/enable-virtualization-based-protection-of-code-integrity",
-                                type: "Technical Guide",
-                                description: "Kernel code integrity enforcement using hypervisor"
+                                type: "Implementation Guide",
+                                description: "Using hypervisor to protect kernel code integrity"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "VBS: Securing Windows with the Hypervisor",
+                                url: "https://www.youtube.com/watch?v=AMagKZs0bnI",
+                                type: "Microsoft Technical Session",
+                                description: "Deep dive into Windows VBS implementation and benefits"
                             }
                         ]
                     }
@@ -730,20 +954,28 @@ const learningData = {
                     name: "Device Guard & Credential Guard",
                     x: 1150, y: 350,
                     prerequisites: ["vbs-arch"],
-                    description: "Application control, code integrity policies, and credential protection",
+                    description: "Application control, code integrity policies, and credential protection using VBS",
                     resources: {
                         primary: [
                             { 
-                                title: "Windows Defender Application Control", 
-                                url: "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/",
-                                type: "Feature Guide",
-                                description: "Application allowlisting and code integrity policies"
+                                title: "Windows Device Guard Deployment Guide", 
+                                url: "https://docs.microsoft.com/en-us/windows/security/threat-protection/device-guard/",
+                                type: "Deployment Guide",
+                                description: "Complete guide to deploying and managing Windows Device Guard"
                             },
                             { 
-                                title: "Windows Defender Credential Guard", 
+                                title: "Credential Guard Architecture and Configuration", 
                                 url: "https://docs.microsoft.com/en-us/windows/security/identity-protection/credential-guard/",
-                                type: "Security Feature",
-                                description: "Hardware-based credential protection technology"
+                                type: "Configuration Guide",
+                                description: "Protecting domain credentials using virtualization-based security"
+                            }
+                        ],
+                        documentation: [
+                            {
+                                title: "Windows Defender Application Control",
+                                url: "https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/",
+                                type: "Policy Guide",
+                                description: "Application allowlisting and code integrity policy management"
                             }
                         ]
                     }
@@ -753,20 +985,28 @@ const learningData = {
                     name: "Confidential Computing Fundamentals",
                     x: 950, y: 450,
                     prerequisites: ["device-guard"],
-                    description: "Protecting data in use, trusted execution environments, and confidential computing principles",
+                    description: "Hardware-based confidentiality, encrypted memory, and attestation in cloud environments",
                     resources: {
                         primary: [
                             { 
-                                title: "Confidential Computing Consortium - Technical Overview", 
+                                title: "Confidential Computing Consortium Overview", 
                                 url: "https://confidentialcomputing.io/",
                                 type: "Industry Initiative",
-                                description: "Industry consortium defining confidential computing standards"
+                                description: "Industry consortium defining confidential computing standards and practices"
                             },
                             { 
                                 title: "Introduction to Confidential Computing", 
                                 url: "https://confidentialcomputing.io/wp-content/uploads/sites/85/2019/12/CCC_Overview.pdf",
-                                type: "Technical Whitepaper",
-                                description: "Comprehensive overview of confidential computing concepts"
+                                type: "Technical Overview",
+                                description: "Comprehensive introduction to confidential computing concepts and technologies"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "Confidential Computing: Protecting Data in Use",
+                                url: "https://www.youtube.com/watch?v=oBklltKhb8o",
+                                type: "Industry Presentation",
+                                description: "Overview of confidential computing technologies and use cases"
                             }
                         ]
                     }
@@ -777,20 +1017,28 @@ const learningData = {
                     x: 1100, y: 450,
                     prerequisites: ["confidential-computing"],
                     intersections: ["ai-hardware"],
-                    description: "Intel SGX, AMD SEV, ARM CCA, and hardware-based trusted execution",
+                    description: "Trusted Execution Environments: Intel SGX, AMD SEV, ARM CCA, and confidential AI",
                     resources: {
                         primary: [
                             { 
-                                title: "Intel Software Guard Extensions (SGX)", 
+                                title: "Intel SGX Developer Guide", 
                                 url: "https://software.intel.com/content/www/us/en/develop/topics/software-guard-extensions.html",
-                                type: "Technology Documentation",
-                                description: "Intel's application-level trusted execution environment"
+                                type: "Developer Documentation",
+                                description: "Complete guide to Intel Software Guard Extensions programming"
                             },
                             { 
-                                title: "AMD Secure Encrypted Virtualization (SEV)", 
+                                title: "AMD SEV Architecture Guide", 
                                 url: "https://developer.amd.com/sev/",
-                                type: "Technology Overview",
-                                description: "AMD's VM-level memory encryption technology"
+                                type: "Architecture Guide",
+                                description: "AMD Secure Encrypted Virtualization technology overview"
+                            }
+                        ],
+                        documentation: [
+                            {
+                                title: "ARM Confidential Compute Architecture",
+                                url: "https://developer.arm.com/documentation/den0125/latest",
+                                type: "Architecture Specification",
+                                description: "ARM's approach to confidential computing with Realm Management Extension"
                             }
                         ]
                     }
@@ -801,20 +1049,28 @@ const learningData = {
                     x: 1250, y: 450,
                     prerequisites: ["hardware-tees"],
                     intersections: ["azure-silicon"],
-                    description: "Azure confidential VMs, enclave computing, and cloud confidential computing services",
+                    description: "Microsoft's confidential computing services, Azure Attestation, and confidential VMs",
                     resources: {
                         primary: [
                             { 
-                                title: "Azure Confidential Computing", 
+                                title: "Azure Confidential Computing Platform", 
                                 url: "https://azure.microsoft.com/en-us/solutions/confidential-compute/",
-                                type: "Service Overview",
-                                description: "Microsoft's confidential computing offerings on Azure"
+                                type: "Platform Overview",
+                                description: "Microsoft's comprehensive confidential computing offerings"
                             },
                             { 
                                 title: "Azure Attestation Service", 
                                 url: "https://docs.microsoft.com/en-us/azure/attestation/",
                                 type: "Service Documentation",
-                                description: "Remote attestation service for trusted execution environments"
+                                description: "Remote attestation service for confidential computing workloads"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "Azure Confidential Computing Deep Dive",
+                                url: "https://www.youtube.com/watch?v=69PrhWQorEM",
+                                type: "Microsoft Build Session",
+                                description: "Technical deep dive into Azure's confidential computing capabilities"
                             }
                         ]
                     }
@@ -824,20 +1080,28 @@ const learningData = {
                     name: "Memory Encryption",
                     x: 950, y: 550,
                     prerequisites: ["azure-confidential"],
-                    description: "Full memory encryption, SEV-SNP, TME, and memory protection technologies",
+                    description: "Runtime memory encryption, key management, and performance optimization for encrypted workloads",
                     resources: {
                         primary: [
                             { 
                                 title: "AMD SEV-SNP: Strengthening VM Isolation", 
                                 url: "https://www.amd.com/system/files/TechDocs/SEV-SNP-strengthening-vm-isolation-with-integrity-protection-and-more.pdf",
                                 type: "Technical Whitepaper",
-                                description: "Advanced memory protection with integrity and freshness"
+                                description: "AMD's latest memory encryption technology with integrity protection"
                             },
                             { 
                                 title: "Intel Total Memory Encryption (TME)", 
                                 url: "https://software.intel.com/content/www/us/en/develop/articles/intel-total-memory-encryption.html",
-                                type: "Technology Brief",
-                                description: "Transparent memory encryption at the memory controller"
+                                type: "Technology Overview",
+                                description: "Intel's approach to transparent memory encryption"
+                            }
+                        ],
+                        documentation: [
+                            {
+                                title: "Memory Encryption Key Management",
+                                url: "https://docs.microsoft.com/en-us/azure/security/fundamentals/encryption-overview",
+                                type: "Security Guide",
+                                description: "Best practices for managing encryption keys in cloud environments"
                             }
                         ]
                     }
@@ -847,20 +1111,28 @@ const learningData = {
                     name: "Secure Boot & Attestation",
                     x: 1100, y: 550,
                     prerequisites: ["memory-encryption"],
-                    description: "UEFI Secure Boot, measured boot, remote attestation, and boot integrity",
+                    description: "Boot integrity, remote attestation protocols, and trust establishment in cloud environments",
                     resources: {
                         primary: [
                             { 
-                                title: "UEFI Secure Boot in Modern Computer Security", 
+                                title: "UEFI Secure Boot in Modern Security Solutions", 
                                 url: "https://uefi.org/sites/default/files/resources/UEFI_Secure_Boot_in_Modern_Computer_Security_Solutions_2013.pdf",
-                                type: "Technical Paper",
-                                description: "Role of UEFI Secure Boot in platform security"
+                                type: "Technical Whitepaper",
+                                description: "Role of UEFI Secure Boot in modern security architectures"
                             },
                             { 
-                                title: "Remote Attestation Procedures", 
+                                title: "Remote Attestation Protocols and Implementation", 
                                 url: "https://www.intel.com/content/www/us/en/architecture-and-technology/intel-txt/software-development-guide.html",
-                                type: "Developer Guide",
-                                description: "Implementing remote attestation with hardware roots of trust"
+                                type: "Implementation Guide",
+                                description: "Implementing remote attestation using hardware security features"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "Attestation and Trust in Cloud Computing",
+                                url: "https://www.youtube.com/watch?v=AMagKZs0bnI",
+                                type: "Academic Presentation",
+                                description: "Trust establishment and verification in distributed cloud systems"
                             }
                         ]
                     }
@@ -879,13 +1151,29 @@ const learningData = {
                                 title: "Confidential Containers Project", 
                                 url: "https://github.com/confidential-containers",
                                 type: "Open Source Project",
-                                description: "Community project for confidential container technologies"
+                                description: "Community project enabling confidential computing for container workloads"
                             },
                             { 
                                 title: "Azure Container Instances - Confidential Computing", 
                                 url: "https://docs.microsoft.com/en-us/azure/container-instances/",
                                 type: "Service Documentation",
-                                description: "Azure's confidential container offerings and capabilities"
+                                description: "Azure's confidential container offerings and implementation"
+                            }
+                        ],
+                        videos: [
+                            {
+                                title: "The Future of Confidential Containers",
+                                url: "https://www.youtube.com/watch?v=oBklltKhb8o",
+                                type: "Industry Conference",
+                                description: "Latest developments in confidential container technologies"
+                            }
+                        ],
+                        documentation: [
+                            {
+                                title: "Kata Containers and Confidential Computing",
+                                url: "https://katacontainers.io/",
+                                type: "Project Documentation",
+                                description: "Lightweight VMs for container workload isolation and security"
                             }
                         ]
                     }
