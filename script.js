@@ -83,12 +83,16 @@ class SubwayMap {
         // Define arrow paths for each track showing learning progression
         const arrowPaths = {
             silicon: [
-                // Horizontal arrows
+                // Horizontal arrows (showing progression from left to right)
                 {from: {x: 175, y: 140}, to: {x: 175, y: 160}, direction: 'right'},
                 {from: {x: 325, y: 140}, to: {x: 325, y: 160}, direction: 'right'},
                 {from: {x: 175, y: 240}, to: {x: 175, y: 260}, direction: 'right'},
                 {from: {x: 325, y: 240}, to: {x: 325, y: 260}, direction: 'right'},
-                // Vertical arrows  
+                {from: {x: 175, y: 340}, to: {x: 175, y: 360}, direction: 'right'},
+                {from: {x: 325, y: 340}, to: {x: 325, y: 360}, direction: 'right'},
+                {from: {x: 175, y: 440}, to: {x: 175, y: 460}, direction: 'right'},
+                {from: {x: 325, y: 440}, to: {x: 325, y: 460}, direction: 'right'},
+                // Vertical arrows (showing progression from top to bottom)
                 {from: {x: 90, y: 200}, to: {x: 110, y: 200}, direction: 'down'},
                 {from: {x: 240, y: 200}, to: {x: 260, y: 200}, direction: 'down'},
                 {from: {x: 390, y: 200}, to: {x: 410, y: 200}, direction: 'down'},
@@ -96,8 +100,7 @@ class SubwayMap {
                 {from: {x: 240, y: 300}, to: {x: 260, y: 300}, direction: 'down'},
                 {from: {x: 390, y: 300}, to: {x: 410, y: 300}, direction: 'down'},
                 {from: {x: 90, y: 400}, to: {x: 110, y: 400}, direction: 'down'},
-                {from: {x: 240, y: 400}, to: {x: 260, y: 400}, direction: 'down'},
-                {from: {x: 390, y: 400}, to: {x: 410, y: 400}, direction: 'down'}
+                {from: {x: 240, y: 400}, to: {x: 260, y: 400}, direction: 'down'}
             ],
             virtualization: [
                 // Horizontal arrows
@@ -105,10 +108,19 @@ class SubwayMap {
                 {from: {x: 775, y: 140}, to: {x: 775, y: 160}, direction: 'right'},
                 {from: {x: 650, y: 240}, to: {x: 650, y: 260}, direction: 'right'},
                 {from: {x: 775, y: 240}, to: {x: 775, y: 260}, direction: 'right'},
+                {from: {x: 675, y: 340}, to: {x: 675, y: 360}, direction: 'right'},
+                {from: {x: 775, y: 340}, to: {x: 775, y: 360}, direction: 'right'},
+                {from: {x: 675, y: 440}, to: {x: 675, y: 460}, direction: 'right'},
+                {from: {x: 775, y: 440}, to: {x: 775, y: 460}, direction: 'right'},
                 // Vertical arrows
                 {from: {x: 590, y: 200}, to: {x: 610, y: 200}, direction: 'down'},
                 {from: {x: 740, y: 200}, to: {x: 760, y: 200}, direction: 'down'},
-                {from: {x: 840, y: 200}, to: {x: 860, y: 200}, direction: 'down'}
+                {from: {x: 840, y: 200}, to: {x: 860, y: 200}, direction: 'down'},
+                {from: {x: 590, y: 300}, to: {x: 610, y: 300}, direction: 'down'},
+                {from: {x: 740, y: 300}, to: {x: 760, y: 300}, direction: 'down'},
+                {from: {x: 840, y: 300}, to: {x: 860, y: 300}, direction: 'down'},
+                {from: {x: 590, y: 400}, to: {x: 610, y: 400}, direction: 'down'},
+                {from: {x: 740, y: 400}, to: {x: 760, y: 400}, direction: 'down'}
             ],
             security: [
                 // Horizontal arrows
@@ -116,10 +128,19 @@ class SubwayMap {
                 {from: {x: 1175, y: 140}, to: {x: 1175, y: 160}, direction: 'right'},
                 {from: {x: 1025, y: 240}, to: {x: 1025, y: 260}, direction: 'right'},
                 {from: {x: 1175, y: 240}, to: {x: 1175, y: 260}, direction: 'right'},
+                {from: {x: 1075, y: 340}, to: {x: 1075, y: 360}, direction: 'right'},
+                {from: {x: 1175, y: 340}, to: {x: 1175, y: 360}, direction: 'right'},
+                {from: {x: 1025, y: 440}, to: {x: 1025, y: 460}, direction: 'right'},
+                {from: {x: 1175, y: 440}, to: {x: 1175, y: 460}, direction: 'right'},
+                {from: {x: 1025, y: 540}, to: {x: 1025, y: 560}, direction: 'right'},
+                {from: {x: 1175, y: 540}, to: {x: 1175, y: 560}, direction: 'right'},
                 // Vertical arrows
                 {from: {x: 990, y: 200}, to: {x: 1010, y: 200}, direction: 'down'},
                 {from: {x: 1140, y: 200}, to: {x: 1160, y: 200}, direction: 'down'},
-                {from: {x: 1240, y: 200}, to: {x: 1260, y: 200}, direction: 'down'}
+                {from: {x: 1240, y: 200}, to: {x: 1260, y: 200}, direction: 'down'},
+                {from: {x: 1240, y: 300}, to: {x: 1260, y: 300}, direction: 'down'},
+                {from: {x: 1240, y: 400}, to: {x: 1260, y: 400}, direction: 'down'},
+                {from: {x: 1240, y: 500}, to: {x: 1260, y: 500}, direction: 'down'}
             ]
         };
 
@@ -140,17 +161,29 @@ class SubwayMap {
 
         let arrowPath;
         if (direction === 'right') {
-            arrowPath = `M ${from.x-8} ${from.y-4} L ${to.x-8} ${to.y+4} L ${from.x-8} ${from.y+4}`;
+            // Right-pointing arrow
+            arrowPath = `M ${from.x-8} ${from.y-4} L ${to.x-2} ${to.y} L ${from.x-8} ${from.y+4} Z`;
         } else if (direction === 'down') {
-            arrowPath = `M ${from.x-4} ${from.y-8} L ${to.x+4} ${to.y-8} L ${from.x+4} ${from.y-8}`;
+            // Down-pointing arrow
+            arrowPath = `M ${from.x-4} ${from.y-8} L ${to.x} ${to.y-2} L ${from.x+4} ${from.y-8} Z`;
         }
 
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.setAttribute('d', arrowPath);
         path.setAttribute('class', `arrow ${trackType}`);
+        path.setAttribute('fill', this.getTrackColor(trackType));
         
         arrowGroup.appendChild(path);
         this.svg.appendChild(arrowGroup);
+    }
+
+    getTrackColor(trackType) {
+        const colors = {
+            silicon: '#2c5aa0',
+            virtualization: '#c53030',
+            security: '#2f855a'
+        };
+        return colors[trackType] || '#666';
     }
 
     addDirectionLabels() {
@@ -168,6 +201,8 @@ class SubwayMap {
             text.setAttribute('x', label.x);
             text.setAttribute('y', label.y);
             text.setAttribute('class', `direction-label ${label.track}`);
+            text.setAttribute('fill', this.getTrackColor(label.track));
+            text.setAttribute('font-weight', 'bold');
             text.textContent = label.text;
             this.svg.appendChild(text);
         });
@@ -238,7 +273,8 @@ class SubwayMap {
         text.setAttribute('y', station.y - 20);
         text.setAttribute('text-anchor', 'middle');
         text.setAttribute('fill', '#2d3748');
-        text.setAttribute('class', station.isStart || station.isEnd ? 'station-label-large' : 'station-label');
+        text.setAttribute('font-size', station.isStart || station.isEnd ? '12px' : '11px');
+        text.setAttribute('font-weight', station.isStart || station.isEnd ? '700' : '500');
         text.textContent = station.name;
 
         // Check if station is completed
@@ -282,6 +318,13 @@ class SubwayMap {
                 this.stationPanel.classList.remove('active');
             }
         });
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.stationPanel.classList.remove('active');
+            }
+        });
     }
 
     showStationDetails(stationId) {
@@ -311,7 +354,11 @@ class SubwayMap {
             station.prerequisites.forEach(prereq => {
                 const prereqStation = this.findStationById(prereq);
                 const isCompleted = this.completedStations.includes(prereq);
-                html += `<span class="prerequisite-tag ${isCompleted ? 'completed' : ''}">${prereqStation?.name || prereq}</span>`;
+                html += `<span class="prerequisite-tag ${isCompleted ? 'completed' : ''}" 
+                              onclick="subwayMap.showStationDetails('${prereq}')" 
+                              style="cursor: pointer;">
+                              ${prereqStation?.name || prereq}
+                         </span>`;
             });
             html += '</div></div>';
         }
@@ -323,7 +370,11 @@ class SubwayMap {
             html += '<div>';
             station.intersections.forEach(intersection => {
                 const intersectionStation = this.findStationById(intersection);
-                html += `<span class="intersection-tag">${intersectionStation?.name || intersection}</span>`;
+                html += `<span class="intersection-tag" 
+                              onclick="subwayMap.showStationDetails('${intersection}')" 
+                              style="cursor: pointer;">
+                              ${intersectionStation?.name || intersection}
+                         </span>`;
             });
             html += '</div></div>';
         }
@@ -336,7 +387,8 @@ class SubwayMap {
                 html += '<div class="resource-grid">';
                 resources.forEach(resource => {
                     html += `
-                        <div class="resource-item" onclick="window.open('${resource.url}', '_blank')">
+                        <div class="resource-item" onclick="window.open('${resource.url}', '_blank')" 
+                             style="cursor: pointer;">
                             <div class="resource-title">${resource.title} <span class="external-link-icon">↗</span></div>
                             <div class="resource-type">${resource.type}</div>
                             ${resource.description ? `<div class="resource-description">${resource.description}</div>` : ''}
@@ -350,8 +402,9 @@ class SubwayMap {
         const isCompleted = this.completedStations.includes(stationId);
         const canComplete = !station.prerequisites || this.arePrerequisitesMet(station.prerequisites);
         
-        html += `<button class="complete-btn" ${!canComplete || isCompleted ? 'disabled' : ''} onclick="subwayMap.toggleStationCompletion('${stationId}')">
-            ${isCompleted ? 'Completed ✓' : 'Mark as Complete'}
+        html += `<button class="complete-btn" ${!canComplete || isCompleted ? 'disabled' : ''} 
+                         onclick="subwayMap.toggleStationCompletion('${stationId}')">
+            ${isCompleted ? 'Completed ✓' : canComplete ? 'Mark as Complete' : 'Prerequisites Required'}
         </button>`;
 
         content.innerHTML = html;
@@ -426,9 +479,40 @@ class SubwayMap {
             }
         });
     }
+
+    // Method to reset all progress (useful for testing)
+    resetProgress() {
+        this.completedStations = [];
+        localStorage.removeItem('completedStations');
+        this.updateStationVisuals();
+        this.updateProgress();
+        console.log('Progress reset!');
+    }
+
+    // Method to get learning statistics
+    getStats() {
+        const stats = {};
+        Object.entries(learningData.tracks).forEach(([trackKey, track]) => {
+            const completed = track.stations.filter(station => 
+                this.completedStations.includes(station.id)
+            ).length;
+            stats[track.name] = {
+                completed: completed,
+                total: track.stations.length,
+                percentage: Math.round((completed / track.stations.length) * 100)
+            };
+        });
+        return stats;
+    }
 }
 
 // Initialize the subway map when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.subwayMap = new SubwayMap();
+    
+    // Add helpful console commands
+    console.log('Azure Learning Subway Map loaded!');
+    console.log('Useful commands:');
+    console.log('- subwayMap.getStats() - View learning progress');
+    console.log('- subwayMap.resetProgress() - Reset all progress');
 });
