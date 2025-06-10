@@ -17,50 +17,49 @@ class SubwayMap {
     drawTracks() {
         const tracks = learningData.tracks;
         
-        // Silicon track (horizontal lines)
+        // Silicon track - spread out more horizontally and vertically
         this.drawTrackLine('silicon', [
-            {x: 100, y: 150}, {x: 400, y: 150}, // Top horizontal
-            {x: 100, y: 250}, {x: 400, y: 250}, // Middle horizontal  
-            {x: 100, y: 350}, {x: 400, y: 350}, // Bottom horizontal
-            {x: 100, y: 450}, {x: 400, y: 450}  // Lowest horizontal
+            {x: 120, y: 180}, {x: 320, y: 180}, {x: 520, y: 180}, // Top horizontal - more spacing
+            {x: 120, y: 280}, {x: 320, y: 280}, {x: 520, y: 280}, // Middle horizontal
+            {x: 120, y: 380}, {x: 320, y: 380}, {x: 520, y: 380}, // Bottom horizontal
+            {x: 120, y: 480}, {x: 320, y: 480}, {x: 520, y: 480}  // Lowest horizontal
         ]);
 
         // Silicon vertical connections
         this.drawTrackLine('silicon', [
-            {x: 100, y: 150}, {x: 100, y: 450}, // Left vertical
-            {x: 250, y: 150}, {x: 250, y: 450}, // Middle vertical
-            {x: 400, y: 150}, {x: 400, y: 450}  // Right vertical
+            {x: 120, y: 180}, {x: 120, y: 480}, // Left vertical
+            {x: 320, y: 180}, {x: 320, y: 480}, // Middle vertical
+            {x: 520, y: 180}, {x: 520, y: 480}  // Right vertical
         ]);
 
-        // Virtualization track
+        // Virtualization track - more spacing
         this.drawTrackLine('virtualization', [
-            {x: 600, y: 150}, {x: 850, y: 150}, // Top horizontal
-            {x: 550, y: 250}, {x: 850, y: 250}, // Middle horizontal
-            {x: 600, y: 350}, {x: 850, y: 350}, // Bottom horizontal
-            {x: 600, y: 450}, {x: 850, y: 450}  // Lowest horizontal
+            {x: 620, y: 180}, {x: 820, y: 180}, {x: 1020, y: 180}, // Top horizontal
+            {x: 620, y: 280}, {x: 820, y: 280}, {x: 1020, y: 280}, // Middle horizontal
+            {x: 620, y: 380}, {x: 820, y: 380}, {x: 1020, y: 380}, // Bottom horizontal
+            {x: 620, y: 480}, {x: 820, y: 480}, {x: 1020, y: 480}  // Lowest horizontal
         ]);
 
         // Virtualization vertical connections
         this.drawTrackLine('virtualization', [
-            {x: 600, y: 150}, {x: 600, y: 450},
-            {x: 750, y: 150}, {x: 750, y: 450},
-            {x: 850, y: 150}, {x: 850, y: 450}
+            {x: 620, y: 180}, {x: 620, y: 480},
+            {x: 820, y: 180}, {x: 820, y: 480},
+            {x: 1020, y: 180}, {x: 1020, y: 480}
         ]);
 
-        // Security track
+        // Security track - more spacing
         this.drawTrackLine('security', [
-            {x: 1000, y: 150}, {x: 1250, y: 150}, // Top horizontal
-            {x: 950, y: 250}, {x: 1250, y: 250},   // Middle horizontal
-            {x: 1000, y: 350}, {x: 1250, y: 350}, // Bottom horizontal
-            {x: 950, y: 450}, {x: 1250, y: 450},   // Lower horizontal
-            {x: 950, y: 550}, {x: 1250, y: 550}    // Lowest horizontal
+            {x: 1120, y: 180}, {x: 1320, y: 180}, // Top horizontal
+            {x: 1120, y: 280}, {x: 1320, y: 280}, // Middle horizontal
+            {x: 1120, y: 380}, {x: 1320, y: 380}, // Bottom horizontal
+            {x: 1120, y: 480}, {x: 1320, y: 480}, // Lower horizontal
+            {x: 1120, y: 580}, {x: 1320, y: 580}  // Lowest horizontal
         ]);
 
         // Security vertical connections
         this.drawTrackLine('security', [
-            {x: 1000, y: 150}, {x: 1000, y: 350},
-            {x: 1150, y: 150}, {x: 1150, y: 350},
-            {x: 1250, y: 150}, {x: 1250, y: 550}
+            {x: 1120, y: 180}, {x: 1120, y: 580},
+            {x: 1320, y: 180}, {x: 1320, y: 580}
         ]);
 
         // Intersection connections
@@ -80,142 +79,91 @@ class SubwayMap {
     }
 
     drawArrows() {
-        // Define arrow paths for each track showing learning progression
-        const arrowPaths = {
-            silicon: [
-                // Horizontal arrows (showing progression from left to right)
-                {from: {x: 175, y: 140}, to: {x: 175, y: 160}, direction: 'right'},
-                {from: {x: 325, y: 140}, to: {x: 325, y: 160}, direction: 'right'},
-                {from: {x: 175, y: 240}, to: {x: 175, y: 260}, direction: 'right'},
-                {from: {x: 325, y: 240}, to: {x: 325, y: 260}, direction: 'right'},
-                {from: {x: 175, y: 340}, to: {x: 175, y: 360}, direction: 'right'},
-                {from: {x: 325, y: 340}, to: {x: 325, y: 360}, direction: 'right'},
-                {from: {x: 175, y: 440}, to: {x: 175, y: 460}, direction: 'right'},
-                {from: {x: 325, y: 440}, to: {x: 325, y: 460}, direction: 'right'},
-                // Vertical arrows (showing progression from top to bottom)
-                {from: {x: 90, y: 200}, to: {x: 110, y: 200}, direction: 'down'},
-                {from: {x: 240, y: 200}, to: {x: 260, y: 200}, direction: 'down'},
-                {from: {x: 390, y: 200}, to: {x: 410, y: 200}, direction: 'down'},
-                {from: {x: 90, y: 300}, to: {x: 110, y: 300}, direction: 'down'},
-                {from: {x: 240, y: 300}, to: {x: 260, y: 300}, direction: 'down'},
-                {from: {x: 390, y: 300}, to: {x: 410, y: 300}, direction: 'down'},
-                {from: {x: 90, y: 400}, to: {x: 110, y: 400}, direction: 'down'},
-                {from: {x: 240, y: 400}, to: {x: 260, y: 400}, direction: 'down'}
-            ],
-            virtualization: [
-                // Horizontal arrows
-                {from: {x: 675, y: 140}, to: {x: 675, y: 160}, direction: 'right'},
-                {from: {x: 775, y: 140}, to: {x: 775, y: 160}, direction: 'right'},
-                {from: {x: 650, y: 240}, to: {x: 650, y: 260}, direction: 'right'},
-                {from: {x: 775, y: 240}, to: {x: 775, y: 260}, direction: 'right'},
-                {from: {x: 675, y: 340}, to: {x: 675, y: 360}, direction: 'right'},
-                {from: {x: 775, y: 340}, to: {x: 775, y: 360}, direction: 'right'},
-                {from: {x: 675, y: 440}, to: {x: 675, y: 460}, direction: 'right'},
-                {from: {x: 775, y: 440}, to: {x: 775, y: 460}, direction: 'right'},
-                // Vertical arrows
-                {from: {x: 590, y: 200}, to: {x: 610, y: 200}, direction: 'down'},
-                {from: {x: 740, y: 200}, to: {x: 760, y: 200}, direction: 'down'},
-                {from: {x: 840, y: 200}, to: {x: 860, y: 200}, direction: 'down'},
-                {from: {x: 590, y: 300}, to: {x: 610, y: 300}, direction: 'down'},
-                {from: {x: 740, y: 300}, to: {x: 760, y: 300}, direction: 'down'},
-                {from: {x: 840, y: 300}, to: {x: 860, y: 300}, direction: 'down'},
-                {from: {x: 590, y: 400}, to: {x: 610, y: 400}, direction: 'down'},
-                {from: {x: 740, y: 400}, to: {x: 760, y: 400}, direction: 'down'}
-            ],
-            security: [
-                // Horizontal arrows
-                {from: {x: 1075, y: 140}, to: {x: 1075, y: 160}, direction: 'right'},
-                {from: {x: 1175, y: 140}, to: {x: 1175, y: 160}, direction: 'right'},
-                {from: {x: 1025, y: 240}, to: {x: 1025, y: 260}, direction: 'right'},
-                {from: {x: 1175, y: 240}, to: {x: 1175, y: 260}, direction: 'right'},
-                {from: {x: 1075, y: 340}, to: {x: 1075, y: 360}, direction: 'right'},
-                {from: {x: 1175, y: 340}, to: {x: 1175, y: 360}, direction: 'right'},
-                {from: {x: 1025, y: 440}, to: {x: 1025, y: 460}, direction: 'right'},
-                {from: {x: 1175, y: 440}, to: {x: 1175, y: 460}, direction: 'right'},
-                {from: {x: 1025, y: 540}, to: {x: 1025, y: 560}, direction: 'right'},
-                {from: {x: 1175, y: 540}, to: {x: 1175, y: 560}, direction: 'right'},
-                // Vertical arrows
-                {from: {x: 990, y: 200}, to: {x: 1010, y: 200}, direction: 'down'},
-                {from: {x: 1140, y: 200}, to: {x: 1160, y: 200}, direction: 'down'},
-                {from: {x: 1240, y: 200}, to: {x: 1260, y: 200}, direction: 'down'},
-                {from: {x: 1240, y: 300}, to: {x: 1260, y: 300}, direction: 'down'},
-                {from: {x: 1240, y: 400}, to: {x: 1260, y: 400}, direction: 'down'},
-                {from: {x: 1240, y: 500}, to: {x: 1260, y: 500}, direction: 'down'}
-            ]
-        };
-
-        // Draw arrows for each track
-        Object.entries(arrowPaths).forEach(([trackType, arrows]) => {
-            arrows.forEach(arrow => {
-                this.drawArrow(arrow.from, arrow.to, arrow.direction, trackType);
-            });
-        });
-
-        // Add START and END labels
-        this.addDirectionLabels();
-    }
-
-    drawArrow(from, to, direction, trackType) {
-        const arrowGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        arrowGroup.setAttribute('class', `arrow ${trackType}`);
-
-        let arrowPath;
-        if (direction === 'right') {
-            // Right-pointing arrow
-            arrowPath = `M ${from.x-8} ${from.y-4} L ${to.x-2} ${to.y} L ${from.x-8} ${from.y+4} Z`;
-        } else if (direction === 'down') {
-            // Down-pointing arrow
-            arrowPath = `M ${from.x-4} ${from.y-8} L ${to.x} ${to.y-2} L ${from.x+4} ${from.y-8} Z`;
-        }
-
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', arrowPath);
-        path.setAttribute('class', `arrow ${trackType}`);
-        path.setAttribute('fill', this.getTrackColor(trackType));
+        // Create proper arrow markers
+        this.createArrowMarkers();
         
-        arrowGroup.appendChild(path);
-        this.svg.appendChild(arrowGroup);
-    }
+        // Define clearer arrow paths showing progression
+        const progressionArrows = [
+            // Silicon track progression arrows
+            {from: {x: 220, y: 180}, to: {x: 270, y: 180}, track: 'silicon'}, // arch-basics to processor-fundamentals
+            {from: {x: 420, y: 180}, to: {x: 470, y: 180}, track: 'silicon'}, // processor-fundamentals to modern-cpu
+            {from: {x: 120, y: 230}, to: {x: 120, y: 250}, track: 'silicon'}, // arch-basics down to platform-arch
+            {from: {x: 220, y: 280}, to: {x: 270, y: 280}, track: 'silicon'}, // platform-arch to memory-systems
+            {from: {x: 420, y: 280}, to: {x: 470, y: 280}, track: 'silicon'}, // memory-systems to interconnects
+            {from: {x: 220, y: 380}, to: {x: 270, y: 380}, track: 'silicon'}, // gpu-arch to ai-hardware
+            {from: {x: 420, y: 380}, to: {x: 470, y: 380}, track: 'silicon'}, // ai-hardware to silicon-lifecycle
+            {from: {x: 220, y: 480}, to: {x: 270, y: 480}, track: 'silicon'}, // hw-validation to vendor-partnership
+            {from: {x: 420, y: 480}, to: {x: 470, y: 480}, track: 'silicon'}, // vendor-partnership to azure-silicon
 
-    getTrackColor(trackType) {
-        const colors = {
-            silicon: '#2c5aa0',
-            virtualization: '#c53030',
-            security: '#2f855a'
-        };
-        return colors[trackType] || '#666';
-    }
+            // Virtualization track progression arrows
+            {from: {x: 720, y: 180}, to: {x: 770, y: 180}, track: 'virtualization'}, // virt-basics to hypervisor-arch
+            {from: {x: 920, y: 180}, to: {x: 970, y: 180}, track: 'virtualization'}, // hypervisor-arch to cpu-virt
+            {from: {x: 720, y: 280}, to: {x: 770, y: 280}, track: 'virtualization'}, // memory-virt to io-virt
+            {from: {x: 720, y: 380}, to: {x: 770, y: 380}, track: 'virtualization'}, // hyperv-arch to enlightenments
+            {from: {x: 920, y: 380}, to: {x: 970, y: 380}, track: 'virtualization'}, // enlightenments to kernel-integration
 
-    addDirectionLabels() {
-        const labels = [
-            {text: "START", x: 50, y: 120, track: "silicon"},
-            {text: "END", x: 450, y: 480, track: "silicon"},
-            {text: "START", x: 550, y: 120, track: "virtualization"},
-            {text: "END", x: 900, y: 480, track: "virtualization"},
-            {text: "START", x: 950, y: 120, track: "security"},
-            {text: "END", x: 1300, y: 580, track: "security"}
+            // Security track progression arrows
+            {from: {x: 1220, y: 180}, to: {x: 1270, y: 180}, track: 'security'}, // security-basics to os-security
+            {from: {x: 1220, y: 280}, to: {x: 1270, y: 280}, track: 'security'}, // tpm to hw-security
+            {from: {x: 1220, y: 380}, to: {x: 1270, y: 380}, track: 'security'}, // vbs-arch to device-guard
+            {from: {x: 1220, y: 480}, to: {x: 1270, y: 480}, track: 'security'} // confidential-computing to hardware-tees
         ];
 
-        labels.forEach(label => {
-            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            text.setAttribute('x', label.x);
-            text.setAttribute('y', label.y);
-            text.setAttribute('class', `direction-label ${label.track}`);
-            text.setAttribute('fill', this.getTrackColor(label.track));
-            text.setAttribute('font-weight', 'bold');
-            text.textContent = label.text;
-            this.svg.appendChild(text);
+        // Draw progression arrows
+        progressionArrows.forEach(arrow => {
+            this.drawProgressionArrow(arrow.from, arrow.to, arrow.track);
         });
+    }
+
+    createArrowMarkers() {
+        // Create SVG defs for arrow markers
+        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        
+        const tracks = ['silicon', 'virtualization', 'security'];
+        const colors = { silicon: '#3182ce', virtualization: '#e53e3e', security: '#38a169' };
+        
+        tracks.forEach(track => {
+            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+            marker.setAttribute('id', `arrow-${track}`);
+            marker.setAttribute('viewBox', '0 0 10 10');
+            marker.setAttribute('refX', '8');
+            marker.setAttribute('refY', '3');
+            marker.setAttribute('markerWidth', '6');
+            marker.setAttribute('markerHeight', '6');
+            marker.setAttribute('orient', 'auto');
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', 'M0,0 L0,6 L9,3 z');
+            path.setAttribute('fill', colors[track]);
+            
+            marker.appendChild(path);
+            defs.appendChild(marker);
+        });
+        
+        this.svg.appendChild(defs);
+    }
+
+    drawProgressionArrow(from, to, track) {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', from.x);
+        line.setAttribute('y1', from.y);
+        line.setAttribute('x2', to.x);
+        line.setAttribute('y2', to.y);
+        line.setAttribute('stroke-width', '3');
+        line.setAttribute('stroke', track === 'silicon' ? '#3182ce' : track === 'virtualization' ? '#e53e3e' : '#38a169');
+        line.setAttribute('marker-end', `url(#arrow-${track})`);
+        line.setAttribute('opacity', '0.8');
+        this.svg.appendChild(line);
     }
 
     drawIntersectionLines() {
-        // Connect intersection points with dotted lines
+        // Connect intersection points with dotted lines - updated coordinates
         const intersections = [
-            {from: {x: 400, y: 150}, to: {x: 550, y: 250}}, // modern-cpu to cpu-virtualization
-            {from: {x: 250, y: 250}, to: {x: 700, y: 250}}, // memory-systems to memory-virtualization
-            {from: {x: 850, y: 350}, to: {x: 1000, y: 350}}, // kernel-integration to vbs-arch
-            {from: {x: 400, y: 450}, to: {x: 1250, y: 450}}, // azure-silicon to azure-confidential
-            {from: {x: 850, y: 450}, to: {x: 1250, y: 550}}  // container-virt to confidential-containers
+            {from: {x: 520, y: 180}, to: {x: 620, y: 280}}, // modern-cpu to cpu-virtualization
+            {from: {x: 320, y: 280}, to: {x: 820, y: 280}}, // memory-systems to memory-virtualization
+            {from: {x: 1020, y: 380}, to: {x: 1120, y: 380}}, // kernel-integration to vbs-arch
+            {from: {x: 520, y: 480}, to: {x: 1320, y: 480}}, // azure-silicon to azure-confidential
+            {from: {x: 1020, y: 480}, to: {x: 1320, y: 580}}  // container-virt to confidential-containers
         ];
 
         intersections.forEach(intersection => {
@@ -224,10 +172,10 @@ class SubwayMap {
             line.setAttribute('y1', intersection.from.y);
             line.setAttribute('x2', intersection.to.x);
             line.setAttribute('y2', intersection.to.y);
-            line.setAttribute('class', 'track-line intersection');
             line.setAttribute('stroke', '#805ad5');
             line.setAttribute('stroke-dasharray', '5,5');
             line.setAttribute('stroke-width', '3');
+            line.setAttribute('opacity', '0.7');
             this.svg.appendChild(line);
         });
     }
@@ -267,15 +215,40 @@ class SubwayMap {
         }
         circle.setAttribute('stroke-width', '3');
 
-        // Station label
+        // Station label - positioned to avoid overlap
         const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         text.setAttribute('x', station.x);
-        text.setAttribute('y', station.y - 20);
+        
+        // Position text above or below based on row to reduce overlap
+        const textY = this.getTextYPosition(station.y, station.x);
+        text.setAttribute('y', textY);
         text.setAttribute('text-anchor', 'middle');
         text.setAttribute('fill', '#2d3748');
-        text.setAttribute('font-size', station.isStart || station.isEnd ? '12px' : '11px');
-        text.setAttribute('font-weight', station.isStart || station.isEnd ? '700' : '500');
-        text.textContent = station.name;
+        text.setAttribute('font-size', '10px');
+        text.setAttribute('font-weight', '600');
+        
+        // Break long text into multiple lines
+        const words = station.name.split(' ');
+        if (words.length > 2) {
+            // Create tspan for multi-line text
+            const firstLine = words.slice(0, 2).join(' ');
+            const secondLine = words.slice(2).join(' ');
+            
+            const tspan1 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+            tspan1.setAttribute('x', station.x);
+            tspan1.setAttribute('dy', '0');
+            tspan1.textContent = firstLine;
+            
+            const tspan2 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+            tspan2.setAttribute('x', station.x);
+            tspan2.setAttribute('dy', '12');
+            tspan2.textContent = secondLine;
+            
+            text.appendChild(tspan1);
+            text.appendChild(tspan2);
+        } else {
+            text.textContent = station.name;
+        }
 
         // Check if station is completed
         if (this.completedStations.includes(station.id)) {
@@ -293,12 +266,22 @@ class SubwayMap {
         this.svg.appendChild(stationGroup);
     }
 
+    getTextYPosition(stationY, stationX) {
+        // Alternate text position above/below to reduce overlap
+        // Top row stations: text below
+        if (stationY <= 200) return stationY + 25;
+        // Bottom row stations: text above  
+        if (stationY >= 450) return stationY - 15;
+        // Middle stations: alternate based on x position
+        return stationX % 400 < 200 ? stationY - 15 : stationY + 25;
+    }
+
+    // ... rest of the methods remain the same as before
     arePrerequisitesMet(prerequisites) {
         return prerequisites.every(prereq => this.completedStations.includes(prereq));
     }
 
     setupEventListeners() {
-        // Station click events
         this.svg.addEventListener('click', (e) => {
             const station = e.target.closest('.station');
             if (station) {
@@ -307,21 +290,12 @@ class SubwayMap {
             }
         });
 
-        // Close panel
         document.getElementById('close-panel').addEventListener('click', () => {
             this.stationPanel.classList.remove('active');
         });
 
-        // Click outside to close panel
         document.addEventListener('click', (e) => {
             if (!this.stationPanel.contains(e.target) && !e.target.closest('.station')) {
-                this.stationPanel.classList.remove('active');
-            }
-        });
-
-        // Keyboard support
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
                 this.stationPanel.classList.remove('active');
             }
         });
@@ -338,7 +312,6 @@ class SubwayMap {
 
         let html = '';
 
-        // Station info
         if (station.description) {
             html += `<div class="station-info">
                 <strong>About this topic:</strong><br>
@@ -346,7 +319,6 @@ class SubwayMap {
             </div>`;
         }
 
-        // Prerequisites
         if (station.prerequisites) {
             html += '<div class="resource-section">';
             html += '<h4>🔗 Prerequisites</h4>';
@@ -354,32 +326,22 @@ class SubwayMap {
             station.prerequisites.forEach(prereq => {
                 const prereqStation = this.findStationById(prereq);
                 const isCompleted = this.completedStations.includes(prereq);
-                html += `<span class="prerequisite-tag ${isCompleted ? 'completed' : ''}" 
-                              onclick="subwayMap.showStationDetails('${prereq}')" 
-                              style="cursor: pointer;">
-                              ${prereqStation?.name || prereq}
-                         </span>`;
+                html += `<span class="prerequisite-tag ${isCompleted ? 'completed' : ''}">${prereqStation?.name || prereq}</span>`;
             });
             html += '</div></div>';
         }
 
-        // Intersections
         if (station.intersections) {
             html += '<div class="resource-section">';
             html += '<h4>🔄 Related Topics</h4>';
             html += '<div>';
             station.intersections.forEach(intersection => {
                 const intersectionStation = this.findStationById(intersection);
-                html += `<span class="intersection-tag" 
-                              onclick="subwayMap.showStationDetails('${intersection}')" 
-                              style="cursor: pointer;">
-                              ${intersectionStation?.name || intersection}
-                         </span>`;
+                html += `<span class="intersection-tag">${intersectionStation?.name || intersection}</span>`;
             });
             html += '</div></div>';
         }
 
-        // Resources
         if (station.resources) {
             Object.entries(station.resources).forEach(([category, resources]) => {
                 html += '<div class="resource-section">';
@@ -387,8 +349,7 @@ class SubwayMap {
                 html += '<div class="resource-grid">';
                 resources.forEach(resource => {
                     html += `
-                        <div class="resource-item" onclick="window.open('${resource.url}', '_blank')" 
-                             style="cursor: pointer;">
+                        <div class="resource-item" onclick="window.open('${resource.url}', '_blank')">
                             <div class="resource-title">${resource.title} <span class="external-link-icon">↗</span></div>
                             <div class="resource-type">${resource.type}</div>
                             ${resource.description ? `<div class="resource-description">${resource.description}</div>` : ''}
@@ -398,13 +359,11 @@ class SubwayMap {
             });
         }
 
-        // Complete button
         const isCompleted = this.completedStations.includes(stationId);
         const canComplete = !station.prerequisites || this.arePrerequisitesMet(station.prerequisites);
         
-        html += `<button class="complete-btn" ${!canComplete || isCompleted ? 'disabled' : ''} 
-                         onclick="subwayMap.toggleStationCompletion('${stationId}')">
-            ${isCompleted ? 'Completed ✓' : canComplete ? 'Mark as Complete' : 'Prerequisites Required'}
+        html += `<button class="complete-btn" ${!canComplete || isCompleted ? 'disabled' : ''} onclick="subwayMap.toggleStationCompletion('${stationId}')">
+            ${isCompleted ? 'Completed ✓' : 'Mark as Complete'}
         </button>`;
 
         content.innerHTML = html;
@@ -444,7 +403,7 @@ class SubwayMap {
             localStorage.setItem('completedStations', JSON.stringify(this.completedStations));
             this.updateStationVisuals();
             this.updateProgress();
-            this.showStationDetails(stationId); // Refresh panel
+            this.showStationDetails(stationId);
         }
     }
 
@@ -479,40 +438,8 @@ class SubwayMap {
             }
         });
     }
-
-    // Method to reset all progress (useful for testing)
-    resetProgress() {
-        this.completedStations = [];
-        localStorage.removeItem('completedStations');
-        this.updateStationVisuals();
-        this.updateProgress();
-        console.log('Progress reset!');
-    }
-
-    // Method to get learning statistics
-    getStats() {
-        const stats = {};
-        Object.entries(learningData.tracks).forEach(([trackKey, track]) => {
-            const completed = track.stations.filter(station => 
-                this.completedStations.includes(station.id)
-            ).length;
-            stats[track.name] = {
-                completed: completed,
-                total: track.stations.length,
-                percentage: Math.round((completed / track.stations.length) * 100)
-            };
-        });
-        return stats;
-    }
 }
 
-// Initialize the subway map when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.subwayMap = new SubwayMap();
-    
-    // Add helpful console commands
-    console.log('Azure Learning Subway Map loaded!');
-    console.log('Useful commands:');
-    console.log('- subwayMap.getStats() - View learning progress');
-    console.log('- subwayMap.resetProgress() - Reset all progress');
 });
