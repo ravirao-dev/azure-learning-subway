@@ -106,9 +106,20 @@ body {
     border: 2px solid;
 }
 
-.legend-symbol.start { background: #ffd700; border-color: #ff8c00; }
-.legend-symbol.end { background: #ff1493; border-color: #dc143c; }
-.legend-symbol.regular { background: white; border-color: #a0aec0; }
+.legend-symbol.start { 
+    background: #ffd700; 
+    border-color: #ff8c00; 
+}
+
+.legend-symbol.end { 
+    background: #ff1493; 
+    border-color: #dc143c; 
+}
+
+.legend-symbol.regular { 
+    background: white; 
+    border-color: #a0aec0; 
+}
 
 /* Map Container */
 .map-container {
@@ -138,7 +149,7 @@ body {
 }
 
 .station:hover circle {
-    r: 12;
+    r: 14;
     stroke-width: 4;
 }
 
@@ -177,6 +188,15 @@ body {
 .station.end-station text {
     font-weight: 700;
     font-size: 12px;
+    fill: #2d3748;
+}
+
+.station.start-station:hover circle {
+    r: 16;
+}
+
+.station.end-station:hover circle {
+    r: 16;
 }
 
 /* Line Styles */
@@ -199,9 +219,20 @@ body {
     opacity: 0.8;
 }
 
-.arrow.silicon { stroke: #2c5aa0; }
-.arrow.virtualization { stroke: #c53030; }
-.arrow.security { stroke: #2f855a; }
+.arrow.silicon { 
+    fill: #2c5aa0;
+    stroke: #2c5aa0; 
+}
+
+.arrow.virtualization { 
+    fill: #c53030;
+    stroke: #c53030; 
+}
+
+.arrow.security { 
+    fill: #2f855a;
+    stroke: #2f855a; 
+}
 
 /* Direction Indicators */
 .direction-label {
@@ -211,6 +242,10 @@ body {
     fill: #4a5568;
     text-anchor: middle;
 }
+
+.direction-label.silicon { fill: #2c5aa0; }
+.direction-label.virtualization { fill: #c53030; }
+.direction-label.security { fill: #2f855a; }
 
 /* Station Panel */
 .station-panel {
@@ -244,6 +279,7 @@ body {
 .panel-header h3 {
     margin: 0;
     font-size: 1.2rem;
+    font-weight: 600;
 }
 
 .close-btn {
@@ -278,6 +314,13 @@ body {
     border-radius: 8px;
     margin-bottom: 20px;
     border-left: 4px solid #4299e1;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.station-info strong {
+    color: #2d3748;
+    font-weight: 600;
 }
 
 .resource-section {
@@ -294,11 +337,6 @@ body {
     gap: 8px;
 }
 
-.resource-section h4::before {
-    content: "📚";
-    font-size: 0.9rem;
-}
-
 .resource-grid {
     display: grid;
     gap: 10px;
@@ -311,6 +349,7 @@ body {
     padding: 15px;
     transition: all 0.2s ease;
     cursor: pointer;
+    position: relative;
 }
 
 .resource-item:hover {
@@ -322,18 +361,21 @@ body {
 .resource-title {
     font-weight: 600;
     color: #2d3748;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-size: 0.95rem;
+    line-height: 1.3;
+    padding-right: 25px;
 }
 
 .resource-type {
     display: inline-block;
-    padding: 2px 8px;
+    padding: 3px 8px;
     background: #e2e8f0;
     color: #4a5568;
     font-size: 0.75rem;
     border-radius: 12px;
     margin-bottom: 8px;
+    font-weight: 500;
 }
 
 .resource-description {
@@ -343,9 +385,12 @@ body {
 }
 
 .external-link-icon {
-    float: right;
+    position: absolute;
+    top: 15px;
+    right: 15px;
     color: #4299e1;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
 .prerequisite-tag, .intersection-tag {
@@ -355,11 +400,17 @@ body {
     font-size: 0.75rem;
     font-weight: 500;
     margin: 2px;
+    cursor: default;
 }
 
 .prerequisite-tag {
     background: #e2e8f0;
     color: #4a5568;
+}
+
+.prerequisite-tag.completed {
+    background: #c6f6d5;
+    color: #22543d;
 }
 
 .intersection-tag {
@@ -381,13 +432,14 @@ body {
     font-size: 0.95rem;
 }
 
-.complete-btn:hover {
+.complete-btn:hover:not(:disabled) {
     background: #38a169;
 }
 
 .complete-btn:disabled {
     background: #a0aec0;
     cursor: not-allowed;
+    opacity: 0.6;
 }
 
 /* Progress Panel */
@@ -403,6 +455,7 @@ body {
 .progress-panel h3 {
     margin-bottom: 15px;
     color: #1a365d;
+    font-size: 1.1rem;
 }
 
 .track-progress {
@@ -421,6 +474,7 @@ body {
 .track-name {
     font-weight: 500;
     font-size: 0.9rem;
+    color: #2d3748;
 }
 
 .progress-bar {
@@ -444,9 +498,21 @@ body {
     font-size: 0.8rem;
     color: #64748b;
     text-align: right;
+    font-weight: 500;
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .station-panel {
+        width: 350px;
+        right: -370px;
+    }
+    
+    .station-panel.active {
+        right: 10px;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 10px;
@@ -465,12 +531,13 @@ body {
     .track-legend {
         flex-direction: column;
         gap: 10px;
+        text-align: center;
     }
     
     .station-panel {
         right: -100vw;
         width: calc(100vw - 20px);
-        max-width: 400px;
+        max-width: 380px;
     }
     
     .station-panel.active {
@@ -481,5 +548,110 @@ body {
         grid-template-columns: 1fr;
         gap: 8px;
         text-align: center;
+    }
+    
+    .progress-bar {
+        width: 100%;
+        margin: 5px 0;
+    }
+    
+    .station text {
+        font-size: 10px;
+    }
+    
+    .direction-label {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo h1 {
+        font-size: 1.5rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .legend {
+        gap: 10px;
+    }
+    
+    .legend-item {
+        font-size: 0.8rem;
+    }
+    
+    .map-container {
+        padding: 15px;
+    }
+    
+    .station-panel {
+        width: calc(100vw - 10px);
+        right: -100vw;
+    }
+    
+    .station-panel.active {
+        right: 5px;
+    }
+}
+
+/* Animation for completed stations */
+@keyframes completedPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(72, 187, 120, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(72, 187, 120, 0);
+    }
+}
+
+.station.completed circle {
+    animation: completedPulse 2s infinite;
+}
+
+/* Loading states */
+.resource-item.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.resource-item.loading::after {
+    content: "Loading...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+/* Accessibility improvements */
+.station:focus {
+    outline: 2px solid #4299e1;
+    outline-offset: 2px;
+}
+
+.resource-item:focus {
+    outline: 2px solid #4299e1;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .station-panel,
+    .progress-panel {
+        display: none;
+    }
+    
+    .container {
+        background: white;
+    }
+    
+    .map-container {
+        box-shadow: none;
+        border: 1px solid #e2e8f0;
     }
 }
