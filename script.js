@@ -1,259 +1,219 @@
 class SubwayMap {
-  constructor(containerId, data) {
-    this.container = document.getElementById(containerId);
-    this.data = data;
-    this.labelsVisible = true;
-    this.scale = 1;
-    this.offsetX = 0;
-    this.offsetY = 0;
-    this.isDragging = false;
-    this.lastMouseX = 0;
-    this.lastMouseY = 0;
-    
-    this.init();
-  }
-  
-  init() {
-    this.createSVG();
-    this.addEventListeners();
-    this.render();
-  }
-  
-  createSVG() {
-    this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    this.svg.setAttribute('width', '100%');
-    this.svg.setAttribute('height', '100%');
-    this.svg.setAttribute('viewBox', '0 0 1000 1000');
-    this.svg.style.cursor = 'grab';
-    
-    // Create defs for arrowheads
-    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-    
-    this.data.tracks.forEach(track => {
-      const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
-      marker.setAttribute('id', `arrow-${track.id}`);
-      marker.setAttribute('viewBox', '0 0 10 10');
-      marker.setAttribute('refX', '8');
-      marker.setAttribute('refY', '3');
-      marker.setAttribute('markerWidth', '6');
-      marker.setAttribute('markerHeight', '6');
-      marker.setAttribute('orient', 'auto');
-      
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', 'M0,0 L0,6 L9,3 z');
-      path.setAttribute('fill', track.color);
-      
-      marker.appendChild(path);
-      defs.appendChild(marker);
-    });
-    
-    this.svg.appendChild(defs);
-    this.container.appendChild(this.svg);
-  }
-  
-  addEventListeners() {
-    // Pan and zoom functionality
-    this.svg.addEventListener('mousedown', (e) => {
-      this.isDragging = true;
-      this.lastMouseX = e.clientX;
-      this.lastMouseY = e.clientY;
-      this.svg.style.cursor = 'grabbing';
-    });
-    
-    this.svg.addEventListener('mousemove', (e) => {
-      if (this.isDragging) {
-        const deltaX = e.clientX - this.lastMouseX;
-        const deltaY = e.clientY - this.lastMouseY;
-        this.offsetX += deltaX / this.scale;
-        this.offsetY += deltaY / this.scale;
-        this.updateViewBox();
-        this.lastMouseX = e.clientX;
-        this.lastMouseY = e.clientY;
-      }
-    });
-    
-    this.svg.addEventListener('mouseup', () => {
-      this.isDragging = false;
-      this.svg.style.cursor = 'grab';
-    });
-    
-    this.svg.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      const delta = e.deltaY > 0 ? 0.9 : 1.1;
-      this.scale *= delta;
-      this.scale = Math.max(0.3, Math.min(3, this.scale));
-      this.updateViewBox();
-    });
-    
-    // Control buttons
-    document.getElementById('toggleLabels').addEventListener('click', () => {
-      this.labelsVisible = !this.labelsVisible;
-      this.toggleLabels();
-    });
-    
-    document.getElementById('resetView').addEventListener('click', () => {
-      this.scale = 1;
-      this.offsetX = 0;
-      this.offsetY = 0;
-      this.updateViewBox();
-    });
-    
-    // Close station info
-    document.getElementById('close-info').addEventListener('click', () => {
-      document.getElementById('station-info').classList.add('hidden');
-    });
-  }
-  
-  updateViewBox() {
-    const width = 1000 / this.scale;
-    const height = 1000 / this.scale;
-    const x = -this.offsetX;
-    const y = -this.offsetY;
-    this.svg.setAttribute('viewBox', `${x} ${y} ${width} ${height}`);
-  }
-  
-  render() {
-    this.svg.innerHTML = this.svg.querySelector('defs').outerHTML;
-    
-    this.data.tracks.forEach(track => {
-      this.renderTrack(track);
-    });
-  }
-  
-  renderTrack(track) {
-    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    group.setAttribute('class', `track track-${track.id}`);
-    
-    // Render connections first (so they appear behind stations)
-    track.connections.forEach(connection => {
-      this.renderConnection(group, track, connection);
-    });
-    
-    // Render stations
-    track.stations.forEach(station => {
-      this.renderStation(group, track, station);
-    });
-    
-    this.svg.appendChild(group);
-  }
-  
-  renderConnection(group, track, connection) {
-    const fromStation = track.stations.find(s => s.id === connection.from);
-    const toStation = track.stations.find(s => s.id === connection.to);
-    
-    if (!fromStation || !toStation) return;
-    
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', fromStation.x);
-    line.setAttribute('y1', fromStation.y);
-    line.setAttribute('x2', toStation.x);
-    line.setAttribute('y2', toStation.y);
-    line.setAttribute('stroke', track.color);
-    line.setAttribute('stroke-width', '4');
-    line.setAttribute('marker-end', `url(#arrow-${track.id})`);
-    line.setAttribute('class', 'connection-line');
-    
-    group.appendChild(line);
-  }
-  
-  renderStation(group, track, station) {
-    const stationGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    stationGroup.setAttribute('class', 'station');
-    stationGroup.setAttribute('transform', `translate(${station.x}, ${station.y})`);
-    
-    // Station circle
-    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('r', station.type === 'start' || station.type === 'end' ? '12' : '8');
-    circle.setAttribute('fill', station.type === 'end' ? '#333' : 'white');
-    circle.setAttribute('stroke', track.color);
-    circle.setAttribute('stroke-width', '3');
-    circle.setAttribute('class', 'station-circle');
-    
-    // Station label background
-    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('x', '0');
-    text.setAttribute('y', '-20');
-    text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('class', 'station-label');
-    text.setAttribute('fill', '#333');
-    text.setAttribute('font-size', '11');
-    text.setAttribute('font-weight', 'bold');
-    text.textContent = station.name;
-    
-    // Label background for readability
-    const textBBox = text.getBBox ? text.getBBox() : { x: -30, y: -8, width: 60, height: 16 };
-    const labelBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    labelBg.setAttribute('x', textBBox.x - 2);
-    labelBg.setAttribute('y', textBBox.y - 2);
-    labelBg.setAttribute('width', textBBox.width + 4);
-    labelBg.setAttribute('height', textBBox.height + 4);
-    labelBg.setAttribute('fill', 'rgba(255, 255, 255, 0.9)');
-    labelBg.setAttribute('stroke', track.color);
-    labelBg.setAttribute('stroke-width', '1');
-    labelBg.setAttribute('rx', '3');
-    labelBg.setAttribute('class', 'label-background');
-    
-    stationGroup.appendChild(labelBg);
-    stationGroup.appendChild(text);
-    stationGroup.appendChild(circle);
-    
-    // Click handler for station info
-    stationGroup.addEventListener('click', () => {
-      this.showStationInfo(station, track);
-    });
-    
-    stationGroup.style.cursor = 'pointer';
-    group.appendChild(stationGroup);
-  }
-  
-  showStationInfo(station, track) {
-    const infoPanel = document.getElementById('station-info');
-    const title = document.getElementById('station-title');
-    const content = document.getElementById('station-content');
-    
-    title.textContent = station.name;
-    
-    let html = `
-      <div class="station-track-info">
-        <span class="track-indicator" style="background-color: ${track.color}"></span>
-        <strong>${track.name}</strong>
-      </div>
-      <p class="station-description">${station.description}</p>
-    `;
-    
-    if (station.resources && station.resources.length > 0) {
-      html += '<div class="resources"><h4>Learning Resources:</h4><ul>';
-      station.resources.forEach(resource => {
-        const icon = this.getResourceIcon(resource.type);
-        html += `<li><span class="resource-icon">${icon}</span><a href="${resource.url}" target="_blank">${resource.title}</a></li>`;
-      });
-      html += '</ul></div>';
+    constructor() {
+        this.svg = document.getElementById('mapSvg');
+        this.modal = document.getElementById('modal');
+        this.showLabels = true;
+        this.init();
     }
-    
-    content.innerHTML = html;
-    infoPanel.classList.remove('hidden');
-  }
-  
-  getResourceIcon(type) {
-    const icons = {
-      'article': '📄',
-      'video': '📹',
-      'book': '📚',
-      'course': '🎓',
-      'documentation': '📋'
-    };
-    return icons[type] || '🔗';
-  }
-  
-  toggleLabels() {
-    const labels = this.svg.querySelectorAll('.station-label, .label-background');
-    labels.forEach(label => {
-      label.style.display = this.labelsVisible ? 'block' : 'none';
-    });
-  }
+
+    init() {
+        this.setupEventListeners();
+        this.drawMap();
+    }
+
+    setupEventListeners() {
+        document.getElementById('toggleLabels').addEventListener('click', () => {
+            this.showLabels = !this.showLabels;
+            this.drawMap();
+        });
+
+        document.getElementById('resetView').addEventListener('click', () => {
+            this.resetView();
+        });
+
+        // Modal event listeners
+        this.modal.querySelector('.close').addEventListener('click', () => {
+            this.closeModal();
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === this.modal) {
+                this.closeModal();
+            }
+        });
+    }
+
+    drawMap() {
+        // Clear existing content
+        this.svg.innerHTML = '';
+        
+        const tracks = Object.values(learningTracks);
+        const trackHeight = 120;
+        const startX = 50;
+        const stationSpacing = 150;
+        
+        tracks.forEach((track, trackIndex) => {
+            const y = 100 + (trackIndex * trackHeight);
+            this.drawTrack(track, startX, y, stationSpacing);
+        });
+    }
+
+    drawTrack(track, startX, y, stationSpacing) {
+        const stations = track.stations;
+        const trackLength = (stations.length - 1) * stationSpacing;
+        
+        // Draw track line
+        const trackLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        trackLine.setAttribute('x1', startX);
+        trackLine.setAttribute('y1', y);
+        trackLine.setAttribute('x2', startX + trackLength);
+        trackLine.setAttribute('y2', y);
+        trackLine.setAttribute('stroke', track.color);
+        trackLine.setAttribute('stroke-width', '6');
+        trackLine.setAttribute('stroke-linecap', 'round');
+        this.svg.appendChild(trackLine);
+
+        // Draw direction arrows
+        this.drawArrows(startX, y, trackLength, track.color, stationSpacing);
+
+        // Draw stations
+        stations.forEach((station, index) => {
+            const x = startX + (index * stationSpacing);
+            this.drawStation(station, x, y, track.color, index === 0, index === stations.length - 1);
+        });
+
+        // Draw track label
+        const trackLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        trackLabel.setAttribute('x', startX - 30);
+        trackLabel.setAttribute('y', y + 5);
+        trackLabel.setAttribute('text-anchor', 'end');
+        trackLabel.setAttribute('font-family', 'Arial, sans-serif');
+        trackLabel.setAttribute('font-size', '14');
+        trackLabel.setAttribute('font-weight', 'bold');
+        trackLabel.setAttribute('fill', track.color);
+        trackLabel.textContent = track.name;
+        this.svg.appendChild(trackLabel);
+    }
+
+    drawArrows(startX, y, trackLength, color, spacing) {
+        const arrowCount = Math.floor(trackLength / spacing);
+        for (let i = 0; i < arrowCount; i++) {
+            const arrowX = startX + (spacing / 2) + (i * spacing);
+            this.drawArrow(arrowX, y, color);
+        }
+    }
+
+    drawArrow(x, y, color) {
+        const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        const points = `${x-5},${y-5} ${x+5},${y} ${x-5},${y+5}`;
+        arrow.setAttribute('points', points);
+        arrow.setAttribute('fill', color);
+        arrow.setAttribute('opacity', '0.7');
+        this.svg.appendChild(arrow);
+    }
+
+    drawStation(station, x, y, color, isStart, isEnd) {
+        // Station circle
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', x);
+        circle.setAttribute('cy', y);
+        circle.setAttribute('r', isStart || isEnd ? '12' : '8');
+        circle.setAttribute('fill', 'white');
+        circle.setAttribute('stroke', color);
+        circle.setAttribute('stroke-width', '3');
+        circle.setAttribute('cursor', 'pointer');
+        circle.addEventListener('click', () => this.showStationDetails(station));
+        this.svg.appendChild(circle);
+
+        // Station label
+        if (this.showLabels) {
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            label.setAttribute('x', x);
+            label.setAttribute('y', y - 20);
+            label.setAttribute('text-anchor', 'middle');
+            label.setAttribute('font-family', 'Arial, sans-serif');
+            label.setAttribute('font-size', '11');
+            label.setAttribute('font-weight', 'bold');
+            label.setAttribute('fill', '#333');
+            label.setAttribute('cursor', 'pointer');
+            label.addEventListener('click', () => this.showStationDetails(station));
+            
+            // Split long station names into multiple lines
+            const words = station.name.split(' ');
+            if (words.length > 2) {
+                const tspan1 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                tspan1.setAttribute('x', x);
+                tspan1.setAttribute('dy', '0');
+                tspan1.textContent = words.slice(0, 2).join(' ');
+                label.appendChild(tspan1);
+                
+                const tspan2 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                tspan2.setAttribute('x', x);
+                tspan2.setAttribute('dy', '12');
+                tspan2.textContent = words.slice(2).join(' ');
+                label.appendChild(tspan2);
+            } else {
+                label.textContent = station.name;
+            }
+            
+            this.svg.appendChild(label);
+        }
+
+        // Start/End indicators
+        if (isStart) {
+            const startIndicator = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            startIndicator.setAttribute('x', x);
+            startIndicator.setAttribute('y', y + 35);
+            startIndicator.setAttribute('text-anchor', 'middle');
+            startIndicator.setAttribute('font-family', 'Arial, sans-serif');
+            startIndicator.setAttribute('font-size', '10');
+            startIndicator.setAttribute('font-weight', 'bold');
+            startIndicator.setAttribute('fill', color);
+            startIndicator.textContent = 'START';
+            this.svg.appendChild(startIndicator);
+        }
+
+        if (isEnd) {
+            const endIndicator = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            endIndicator.setAttribute('x', x);
+            endIndicator.setAttribute('y', y + 35);
+            endIndicator.setAttribute('text-anchor', 'middle');
+            endIndicator.setAttribute('font-family', 'Arial, sans-serif');
+            endIndicator.setAttribute('font-size', '10');
+            endIndicator.setAttribute('font-weight', 'bold');
+            endIndicator.setAttribute('fill', color);
+            endIndicator.textContent = 'END';
+            this.svg.appendChild(endIndicator);
+        }
+    }
+
+    showStationDetails(station) {
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        modalTitle.textContent = station.name;
+        
+        let resourcesHtml = `
+            <p><strong>Description:</strong> ${station.description}</p>
+            <h3>Learning Resources:</h3>
+            <ul>
+        `;
+
+        station.resources.forEach(resource => {
+            resourcesHtml += `
+                <li>
+                    <strong>${resource.type.toUpperCase()}:</strong> 
+                    <a href="${resource.url}" target="_blank">${resource.title}</a>
+                </li>
+            `;
+        });
+
+        resourcesHtml += '</ul>';
+        modalBody.innerHTML = resourcesHtml;
+        modal.style.display = 'block';
+    }
+
+    closeModal() {
+        this.modal.style.display = 'none';
+    }
+
+    resetView() {
+        this.drawMap();
+    }
 }
 
 // Initialize the subway map when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-  const subwayMap = new SubwayMap('subway-map', learningData);
+document.addEventListener('DOMContentLoaded', () => {
+    new SubwayMap();
 });
