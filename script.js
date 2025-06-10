@@ -1,445 +1,259 @@
 class SubwayMap {
-    constructor() {
-        this.svg = document.getElementById('subway-map');
-        this.stationPanel = document.getElementById('station-panel');
-        this.completedStations = JSON.parse(localStorage.getItem('completedStations') || '[]');
-        this.init();
+  constructor(containerId, data) {
+    this.container = document.getElementById(containerId);
+    this.data = data;
+    this.labelsVisible = true;
+    this.scale = 1;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.isDragging = false;
+    this.lastMouseX = 0;
+    this.lastMouseY = 0;
+    
+    this.init();
+  }
+  
+  init() {
+    this.createSVG();
+    this.addEventListeners();
+    this.render();
+  }
+  
+  createSVG() {
+    this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    this.svg.setAttribute('width', '100%');
+    this.svg.setAttribute('height', '100%');
+    this.svg.setAttribute('viewBox', '0 0 1000 1000');
+    this.svg.style.cursor = 'grab';
+    
+    // Create defs for arrowheads
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    
+    this.data.tracks.forEach(track => {
+      const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+      marker.setAttribute('id', `arrow-${track.id}`);
+      marker.setAttribute('viewBox', '0 0 10 10');
+      marker.setAttribute('refX', '8');
+      marker.setAttribute('refY', '3');
+      marker.setAttribute('markerWidth', '6');
+      marker.setAttribute('markerHeight', '6');
+      marker.setAttribute('orient', 'auto');
+      
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', 'M0,0 L0,6 L9,3 z');
+      path.setAttribute('fill', track.color);
+      
+      marker.appendChild(path);
+      defs.appendChild(marker);
+    });
+    
+    this.svg.appendChild(defs);
+    this.container.appendChild(this.svg);
+  }
+  
+  addEventListeners() {
+    // Pan and zoom functionality
+    this.svg.addEventListener('mousedown', (e) => {
+      this.isDragging = true;
+      this.lastMouseX = e.clientX;
+      this.lastMouseY = e.clientY;
+      this.svg.style.cursor = 'grabbing';
+    });
+    
+    this.svg.addEventListener('mousemove', (e) => {
+      if (this.isDragging) {
+        const deltaX = e.clientX - this.lastMouseX;
+        const deltaY = e.clientY - this.lastMouseY;
+        this.offsetX += deltaX / this.scale;
+        this.offsetY += deltaY / this.scale;
+        this.updateViewBox();
+        this.lastMouseX = e.clientX;
+        this.lastMouseY = e.clientY;
+      }
+    });
+    
+    this.svg.addEventListener('mouseup', () => {
+      this.isDragging = false;
+      this.svg.style.cursor = 'grab';
+    });
+    
+    this.svg.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? 0.9 : 1.1;
+      this.scale *= delta;
+      this.scale = Math.max(0.3, Math.min(3, this.scale));
+      this.updateViewBox();
+    });
+    
+    // Control buttons
+    document.getElementById('toggleLabels').addEventListener('click', () => {
+      this.labelsVisible = !this.labelsVisible;
+      this.toggleLabels();
+    });
+    
+    document.getElementById('resetView').addEventListener('click', () => {
+      this.scale = 1;
+      this.offsetX = 0;
+      this.offsetY = 0;
+      this.updateViewBox();
+    });
+    
+    // Close station info
+    document.getElementById('close-info').addEventListener('click', () => {
+      document.getElementById('station-info').classList.add('hidden');
+    });
+  }
+  
+  updateViewBox() {
+    const width = 1000 / this.scale;
+    const height = 1000 / this.scale;
+    const x = -this.offsetX;
+    const y = -this.offsetY;
+    this.svg.setAttribute('viewBox', `${x} ${y} ${width} ${height}`);
+  }
+  
+  render() {
+    this.svg.innerHTML = this.svg.querySelector('defs').outerHTML;
+    
+    this.data.tracks.forEach(track => {
+      this.renderTrack(track);
+    });
+  }
+  
+  renderTrack(track) {
+    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    group.setAttribute('class', `track track-${track.id}`);
+    
+    // Render connections first (so they appear behind stations)
+    track.connections.forEach(connection => {
+      this.renderConnection(group, track, connection);
+    });
+    
+    // Render stations
+    track.stations.forEach(station => {
+      this.renderStation(group, track, station);
+    });
+    
+    this.svg.appendChild(group);
+  }
+  
+  renderConnection(group, track, connection) {
+    const fromStation = track.stations.find(s => s.id === connection.from);
+    const toStation = track.stations.find(s => s.id === connection.to);
+    
+    if (!fromStation || !toStation) return;
+    
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', fromStation.x);
+    line.setAttribute('y1', fromStation.y);
+    line.setAttribute('x2', toStation.x);
+    line.setAttribute('y2', toStation.y);
+    line.setAttribute('stroke', track.color);
+    line.setAttribute('stroke-width', '4');
+    line.setAttribute('marker-end', `url(#arrow-${track.id})`);
+    line.setAttribute('class', 'connection-line');
+    
+    group.appendChild(line);
+  }
+  
+  renderStation(group, track, station) {
+    const stationGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    stationGroup.setAttribute('class', 'station');
+    stationGroup.setAttribute('transform', `translate(${station.x}, ${station.y})`);
+    
+    // Station circle
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('r', station.type === 'start' || station.type === 'end' ? '12' : '8');
+    circle.setAttribute('fill', station.type === 'end' ? '#333' : 'white');
+    circle.setAttribute('stroke', track.color);
+    circle.setAttribute('stroke-width', '3');
+    circle.setAttribute('class', 'station-circle');
+    
+    // Station label background
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', '0');
+    text.setAttribute('y', '-20');
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('class', 'station-label');
+    text.setAttribute('fill', '#333');
+    text.setAttribute('font-size', '11');
+    text.setAttribute('font-weight', 'bold');
+    text.textContent = station.name;
+    
+    // Label background for readability
+    const textBBox = text.getBBox ? text.getBBox() : { x: -30, y: -8, width: 60, height: 16 };
+    const labelBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    labelBg.setAttribute('x', textBBox.x - 2);
+    labelBg.setAttribute('y', textBBox.y - 2);
+    labelBg.setAttribute('width', textBBox.width + 4);
+    labelBg.setAttribute('height', textBBox.height + 4);
+    labelBg.setAttribute('fill', 'rgba(255, 255, 255, 0.9)');
+    labelBg.setAttribute('stroke', track.color);
+    labelBg.setAttribute('stroke-width', '1');
+    labelBg.setAttribute('rx', '3');
+    labelBg.setAttribute('class', 'label-background');
+    
+    stationGroup.appendChild(labelBg);
+    stationGroup.appendChild(text);
+    stationGroup.appendChild(circle);
+    
+    // Click handler for station info
+    stationGroup.addEventListener('click', () => {
+      this.showStationInfo(station, track);
+    });
+    
+    stationGroup.style.cursor = 'pointer';
+    group.appendChild(stationGroup);
+  }
+  
+  showStationInfo(station, track) {
+    const infoPanel = document.getElementById('station-info');
+    const title = document.getElementById('station-title');
+    const content = document.getElementById('station-content');
+    
+    title.textContent = station.name;
+    
+    let html = `
+      <div class="station-track-info">
+        <span class="track-indicator" style="background-color: ${track.color}"></span>
+        <strong>${track.name}</strong>
+      </div>
+      <p class="station-description">${station.description}</p>
+    `;
+    
+    if (station.resources && station.resources.length > 0) {
+      html += '<div class="resources"><h4>Learning Resources:</h4><ul>';
+      station.resources.forEach(resource => {
+        const icon = this.getResourceIcon(resource.type);
+        html += `<li><span class="resource-icon">${icon}</span><a href="${resource.url}" target="_blank">${resource.title}</a></li>`;
+      });
+      html += '</ul></div>';
     }
-
-    init() {
-        this.drawTracks();
-        this.drawArrows();
-        this.drawStations();
-        this.setupEventListeners();
-        this.updateProgress();
-    }
-
-    drawTracks() {
-        const tracks = learningData.tracks;
-        
-        // Silicon track - spread out more horizontally and vertically
-        this.drawTrackLine('silicon', [
-            {x: 120, y: 180}, {x: 320, y: 180}, {x: 520, y: 180}, // Top horizontal - more spacing
-            {x: 120, y: 280}, {x: 320, y: 280}, {x: 520, y: 280}, // Middle horizontal
-            {x: 120, y: 380}, {x: 320, y: 380}, {x: 520, y: 380}, // Bottom horizontal
-            {x: 120, y: 480}, {x: 320, y: 480}, {x: 520, y: 480}  // Lowest horizontal
-        ]);
-
-        // Silicon vertical connections
-        this.drawTrackLine('silicon', [
-            {x: 120, y: 180}, {x: 120, y: 480}, // Left vertical
-            {x: 320, y: 180}, {x: 320, y: 480}, // Middle vertical
-            {x: 520, y: 180}, {x: 520, y: 480}  // Right vertical
-        ]);
-
-        // Virtualization track - more spacing
-        this.drawTrackLine('virtualization', [
-            {x: 620, y: 180}, {x: 820, y: 180}, {x: 1020, y: 180}, // Top horizontal
-            {x: 620, y: 280}, {x: 820, y: 280}, {x: 1020, y: 280}, // Middle horizontal
-            {x: 620, y: 380}, {x: 820, y: 380}, {x: 1020, y: 380}, // Bottom horizontal
-            {x: 620, y: 480}, {x: 820, y: 480}, {x: 1020, y: 480}  // Lowest horizontal
-        ]);
-
-        // Virtualization vertical connections
-        this.drawTrackLine('virtualization', [
-            {x: 620, y: 180}, {x: 620, y: 480},
-            {x: 820, y: 180}, {x: 820, y: 480},
-            {x: 1020, y: 180}, {x: 1020, y: 480}
-        ]);
-
-        // Security track - more spacing
-        this.drawTrackLine('security', [
-            {x: 1120, y: 180}, {x: 1320, y: 180}, // Top horizontal
-            {x: 1120, y: 280}, {x: 1320, y: 280}, // Middle horizontal
-            {x: 1120, y: 380}, {x: 1320, y: 380}, // Bottom horizontal
-            {x: 1120, y: 480}, {x: 1320, y: 480}, // Lower horizontal
-            {x: 1120, y: 580}, {x: 1320, y: 580}  // Lowest horizontal
-        ]);
-
-        // Security vertical connections
-        this.drawTrackLine('security', [
-            {x: 1120, y: 180}, {x: 1120, y: 580},
-            {x: 1320, y: 180}, {x: 1320, y: 580}
-        ]);
-
-        // Intersection connections
-        this.drawIntersectionLines();
-    }
-
-    drawTrackLine(trackType, points) {
-        for (let i = 0; i < points.length - 1; i++) {
-            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('x1', points[i].x);
-            line.setAttribute('y1', points[i].y);
-            line.setAttribute('x2', points[i + 1].x);
-            line.setAttribute('y2', points[i + 1].y);
-            line.setAttribute('class', `track-line ${trackType}`);
-            this.svg.appendChild(line);
-        }
-    }
-
-    drawArrows() {
-        // Create proper arrow markers
-        this.createArrowMarkers();
-        
-        // Define clearer arrow paths showing progression
-        const progressionArrows = [
-            // Silicon track progression arrows
-            {from: {x: 220, y: 180}, to: {x: 270, y: 180}, track: 'silicon'}, // arch-basics to processor-fundamentals
-            {from: {x: 420, y: 180}, to: {x: 470, y: 180}, track: 'silicon'}, // processor-fundamentals to modern-cpu
-            {from: {x: 120, y: 230}, to: {x: 120, y: 250}, track: 'silicon'}, // arch-basics down to platform-arch
-            {from: {x: 220, y: 280}, to: {x: 270, y: 280}, track: 'silicon'}, // platform-arch to memory-systems
-            {from: {x: 420, y: 280}, to: {x: 470, y: 280}, track: 'silicon'}, // memory-systems to interconnects
-            {from: {x: 220, y: 380}, to: {x: 270, y: 380}, track: 'silicon'}, // gpu-arch to ai-hardware
-            {from: {x: 420, y: 380}, to: {x: 470, y: 380}, track: 'silicon'}, // ai-hardware to silicon-lifecycle
-            {from: {x: 220, y: 480}, to: {x: 270, y: 480}, track: 'silicon'}, // hw-validation to vendor-partnership
-            {from: {x: 420, y: 480}, to: {x: 470, y: 480}, track: 'silicon'}, // vendor-partnership to azure-silicon
-
-            // Virtualization track progression arrows
-            {from: {x: 720, y: 180}, to: {x: 770, y: 180}, track: 'virtualization'}, // virt-basics to hypervisor-arch
-            {from: {x: 920, y: 180}, to: {x: 970, y: 180}, track: 'virtualization'}, // hypervisor-arch to cpu-virt
-            {from: {x: 720, y: 280}, to: {x: 770, y: 280}, track: 'virtualization'}, // memory-virt to io-virt
-            {from: {x: 720, y: 380}, to: {x: 770, y: 380}, track: 'virtualization'}, // hyperv-arch to enlightenments
-            {from: {x: 920, y: 380}, to: {x: 970, y: 380}, track: 'virtualization'}, // enlightenments to kernel-integration
-
-            // Security track progression arrows
-            {from: {x: 1220, y: 180}, to: {x: 1270, y: 180}, track: 'security'}, // security-basics to os-security
-            {from: {x: 1220, y: 280}, to: {x: 1270, y: 280}, track: 'security'}, // tpm to hw-security
-            {from: {x: 1220, y: 380}, to: {x: 1270, y: 380}, track: 'security'}, // vbs-arch to device-guard
-            {from: {x: 1220, y: 480}, to: {x: 1270, y: 480}, track: 'security'} // confidential-computing to hardware-tees
-        ];
-
-        // Draw progression arrows
-        progressionArrows.forEach(arrow => {
-            this.drawProgressionArrow(arrow.from, arrow.to, arrow.track);
-        });
-    }
-
-    createArrowMarkers() {
-        // Create SVG defs for arrow markers
-        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-        
-        const tracks = ['silicon', 'virtualization', 'security'];
-        const colors = { silicon: '#3182ce', virtualization: '#e53e3e', security: '#38a169' };
-        
-        tracks.forEach(track => {
-            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
-            marker.setAttribute('id', `arrow-${track}`);
-            marker.setAttribute('viewBox', '0 0 10 10');
-            marker.setAttribute('refX', '8');
-            marker.setAttribute('refY', '3');
-            marker.setAttribute('markerWidth', '6');
-            marker.setAttribute('markerHeight', '6');
-            marker.setAttribute('orient', 'auto');
-            
-            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            path.setAttribute('d', 'M0,0 L0,6 L9,3 z');
-            path.setAttribute('fill', colors[track]);
-            
-            marker.appendChild(path);
-            defs.appendChild(marker);
-        });
-        
-        this.svg.appendChild(defs);
-    }
-
-    drawProgressionArrow(from, to, track) {
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('x1', from.x);
-        line.setAttribute('y1', from.y);
-        line.setAttribute('x2', to.x);
-        line.setAttribute('y2', to.y);
-        line.setAttribute('stroke-width', '3');
-        line.setAttribute('stroke', track === 'silicon' ? '#3182ce' : track === 'virtualization' ? '#e53e3e' : '#38a169');
-        line.setAttribute('marker-end', `url(#arrow-${track})`);
-        line.setAttribute('opacity', '0.8');
-        this.svg.appendChild(line);
-    }
-
-    drawIntersectionLines() {
-        // Connect intersection points with dotted lines - updated coordinates
-        const intersections = [
-            {from: {x: 520, y: 180}, to: {x: 620, y: 280}}, // modern-cpu to cpu-virtualization
-            {from: {x: 320, y: 280}, to: {x: 820, y: 280}}, // memory-systems to memory-virtualization
-            {from: {x: 1020, y: 380}, to: {x: 1120, y: 380}}, // kernel-integration to vbs-arch
-            {from: {x: 520, y: 480}, to: {x: 1320, y: 480}}, // azure-silicon to azure-confidential
-            {from: {x: 1020, y: 480}, to: {x: 1320, y: 580}}  // container-virt to confidential-containers
-        ];
-
-        intersections.forEach(intersection => {
-            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('x1', intersection.from.x);
-            line.setAttribute('y1', intersection.from.y);
-            line.setAttribute('x2', intersection.to.x);
-            line.setAttribute('y2', intersection.to.y);
-            line.setAttribute('stroke', '#805ad5');
-            line.setAttribute('stroke-dasharray', '5,5');
-            line.setAttribute('stroke-width', '3');
-            line.setAttribute('opacity', '0.7');
-            this.svg.appendChild(line);
-        });
-    }
-
-    drawStations() {
-        Object.values(learningData.tracks).forEach(track => {
-            track.stations.forEach(station => {
-                this.createStation(station, track.color);
-            });
-        });
-    }
-
-    createStation(station, trackColor) {
-        const stationGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        stationGroup.setAttribute('class', 'station');
-        stationGroup.setAttribute('data-station-id', station.id);
-        
-        // Add special classes for start/end stations
-        if (station.isStart) stationGroup.classList.add('start-station');
-        if (station.isEnd) stationGroup.classList.add('end-station');
-
-        // Station circle
-        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circle.setAttribute('cx', station.x);
-        circle.setAttribute('cy', station.y);
-        circle.setAttribute('r', station.isStart || station.isEnd ? '12' : '8');
-        
-        if (station.isStart) {
-            circle.setAttribute('fill', '#ffd700');
-            circle.setAttribute('stroke', '#ff8c00');
-        } else if (station.isEnd) {
-            circle.setAttribute('fill', '#ff1493');
-            circle.setAttribute('stroke', '#dc143c');
-        } else {
-            circle.setAttribute('fill', 'white');
-            circle.setAttribute('stroke', trackColor);
-        }
-        circle.setAttribute('stroke-width', '3');
-
-        // Station label - positioned to avoid overlap
-        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        text.setAttribute('x', station.x);
-        
-        // Position text above or below based on row to reduce overlap
-        const textY = this.getTextYPosition(station.y, station.x);
-        text.setAttribute('y', textY);
-        text.setAttribute('text-anchor', 'middle');
-        text.setAttribute('fill', '#2d3748');
-        text.setAttribute('font-size', '10px');
-        text.setAttribute('font-weight', '600');
-        
-        // Break long text into multiple lines
-        const words = station.name.split(' ');
-        if (words.length > 2) {
-            // Create tspan for multi-line text
-            const firstLine = words.slice(0, 2).join(' ');
-            const secondLine = words.slice(2).join(' ');
-            
-            const tspan1 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-            tspan1.setAttribute('x', station.x);
-            tspan1.setAttribute('dy', '0');
-            tspan1.textContent = firstLine;
-            
-            const tspan2 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-            tspan2.setAttribute('x', station.x);
-            tspan2.setAttribute('dy', '12');
-            tspan2.textContent = secondLine;
-            
-            text.appendChild(tspan1);
-            text.appendChild(tspan2);
-        } else {
-            text.textContent = station.name;
-        }
-
-        // Check if station is completed
-        if (this.completedStations.includes(station.id)) {
-            stationGroup.classList.add('completed');
-        }
-
-        // Check if station has prerequisites
-        if (station.prerequisites && !this.arePrerequisitesMet(station.prerequisites)) {
-            circle.setAttribute('opacity', '0.5');
-            text.setAttribute('opacity', '0.5');
-        }
-
-        stationGroup.appendChild(circle);
-        stationGroup.appendChild(text);
-        this.svg.appendChild(stationGroup);
-    }
-
-    getTextYPosition(stationY, stationX) {
-        // Alternate text position above/below to reduce overlap
-        // Top row stations: text below
-        if (stationY <= 200) return stationY + 25;
-        // Bottom row stations: text above  
-        if (stationY >= 450) return stationY - 15;
-        // Middle stations: alternate based on x position
-        return stationX % 400 < 200 ? stationY - 15 : stationY + 25;
-    }
-
-    // ... rest of the methods remain the same as before
-    arePrerequisitesMet(prerequisites) {
-        return prerequisites.every(prereq => this.completedStations.includes(prereq));
-    }
-
-    setupEventListeners() {
-        this.svg.addEventListener('click', (e) => {
-            const station = e.target.closest('.station');
-            if (station) {
-                const stationId = station.getAttribute('data-station-id');
-                this.showStationDetails(stationId);
-            }
-        });
-
-        document.getElementById('close-panel').addEventListener('click', () => {
-            this.stationPanel.classList.remove('active');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!this.stationPanel.contains(e.target) && !e.target.closest('.station')) {
-                this.stationPanel.classList.remove('active');
-            }
-        });
-    }
-
-    showStationDetails(stationId) {
-        const station = this.findStationById(stationId);
-        if (!station) return;
-
-        const title = document.getElementById('station-title');
-        const content = document.getElementById('panel-content');
-
-        title.textContent = station.name;
-
-        let html = '';
-
-        if (station.description) {
-            html += `<div class="station-info">
-                <strong>About this topic:</strong><br>
-                ${station.description}
-            </div>`;
-        }
-
-        if (station.prerequisites) {
-            html += '<div class="resource-section">';
-            html += '<h4>🔗 Prerequisites</h4>';
-            html += '<div>';
-            station.prerequisites.forEach(prereq => {
-                const prereqStation = this.findStationById(prereq);
-                const isCompleted = this.completedStations.includes(prereq);
-                html += `<span class="prerequisite-tag ${isCompleted ? 'completed' : ''}">${prereqStation?.name || prereq}</span>`;
-            });
-            html += '</div></div>';
-        }
-
-        if (station.intersections) {
-            html += '<div class="resource-section">';
-            html += '<h4>🔄 Related Topics</h4>';
-            html += '<div>';
-            station.intersections.forEach(intersection => {
-                const intersectionStation = this.findStationById(intersection);
-                html += `<span class="intersection-tag">${intersectionStation?.name || intersection}</span>`;
-            });
-            html += '</div></div>';
-        }
-
-        if (station.resources) {
-            Object.entries(station.resources).forEach(([category, resources]) => {
-                html += '<div class="resource-section">';
-                html += `<h4>${this.formatCategory(category)}</h4>`;
-                html += '<div class="resource-grid">';
-                resources.forEach(resource => {
-                    html += `
-                        <div class="resource-item" onclick="window.open('${resource.url}', '_blank')">
-                            <div class="resource-title">${resource.title} <span class="external-link-icon">↗</span></div>
-                            <div class="resource-type">${resource.type}</div>
-                            ${resource.description ? `<div class="resource-description">${resource.description}</div>` : ''}
-                        </div>`;
-                });
-                html += '</div></div>';
-            });
-        }
-
-        const isCompleted = this.completedStations.includes(stationId);
-        const canComplete = !station.prerequisites || this.arePrerequisitesMet(station.prerequisites);
-        
-        html += `<button class="complete-btn" ${!canComplete || isCompleted ? 'disabled' : ''} onclick="subwayMap.toggleStationCompletion('${stationId}')">
-            ${isCompleted ? 'Completed ✓' : 'Mark as Complete'}
-        </button>`;
-
-        content.innerHTML = html;
-        this.stationPanel.classList.add('active');
-    }
-
-    findStationById(stationId) {
-        for (const track of Object.values(learningData.tracks)) {
-            const station = track.stations.find(s => s.id === stationId);
-            if (station) return station;
-        }
-        return null;
-    }
-
-    formatCategory(category) {
-        const categoryNames = {
-            primary: '📚 Primary Resources',
-            documentation: '📋 Official Documentation', 
-            videos: '🎥 Video Content',
-            labs: '🧪 Hands-on Labs'
-        };
-        return categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
-    }
-
-    toggleStationCompletion(stationId) {
-        const station = this.findStationById(stationId);
-        if (!station) return;
-
-        if (!station.prerequisites || this.arePrerequisitesMet(station.prerequisites)) {
-            const index = this.completedStations.indexOf(stationId);
-            if (index > -1) {
-                this.completedStations.splice(index, 1);
-            } else {
-                this.completedStations.push(stationId);
-            }
-
-            localStorage.setItem('completedStations', JSON.stringify(this.completedStations));
-            this.updateStationVisuals();
-            this.updateProgress();
-            this.showStationDetails(stationId);
-        }
-    }
-
-    updateStationVisuals() {
-        document.querySelectorAll('.station').forEach(stationElement => {
-            const stationId = stationElement.getAttribute('data-station-id');
-            const isCompleted = this.completedStations.includes(stationId);
-            
-            if (isCompleted) {
-                stationElement.classList.add('completed');
-            } else {
-                stationElement.classList.remove('completed');
-            }
-        });
-    }
-
-    updateProgress() {
-        Object.entries(learningData.tracks).forEach(([trackKey, track]) => {
-            const completedInTrack = track.stations.filter(station => 
-                this.completedStations.includes(station.id)
-            ).length;
-            
-            const totalInTrack = track.stations.length;
-            const percentage = (completedInTrack / totalInTrack) * 100;
-            
-            const progressFill = document.querySelector(`.progress-fill.${trackKey}`);
-            const progressText = progressFill?.parentElement.parentElement.querySelector('.progress-text');
-            
-            if (progressFill && progressText) {
-                progressFill.style.width = `${percentage}%`;
-                progressText.textContent = `${completedInTrack}/${totalInTrack}`;
-            }
-        });
-    }
+    
+    content.innerHTML = html;
+    infoPanel.classList.remove('hidden');
+  }
+  
+  getResourceIcon(type) {
+    const icons = {
+      'article': '📄',
+      'video': '📹',
+      'book': '📚',
+      'course': '🎓',
+      'documentation': '📋'
+    };
+    return icons[type] || '🔗';
+  }
+  
+  toggleLabels() {
+    const labels = this.svg.querySelectorAll('.station-label, .label-background');
+    labels.forEach(label => {
+      label.style.display = this.labelsVisible ? 'block' : 'none';
+    });
+  }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    window.subwayMap = new SubwayMap();
+// Initialize the subway map when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+  const subwayMap = new SubwayMap('subway-map', learningData);
 });
