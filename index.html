@@ -7,41 +7,46 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="header">
-        <h1>Azure Infrastructure Learning Subway Map</h1>
-        <p>Navigate your learning journey through Silicon, Virtualization, and Security</p>
-    </div>
-    
-    <div class="controls">
-        <button id="toggleLabels" class="control-btn">Toggle Labels</button>
-        <button id="resetView" class="control-btn">Reset View</button>
-    </div>
-    
-    <div class="legend">
-        <div class="legend-item">
-            <span class="legend-color silicon"></span>
-            <span>Silicon Track</span>
+    <div class="container">
+        <header>
+            <h1>Azure Infrastructure Learning Subway Map</h1>
+            <p>Navigate your learning journey through Silicon, Virtualization, and Security</p>
+            <div class="controls">
+                <button id="toggleLabels">Toggle Labels</button>
+                <button id="resetView">Reset View</button>
+            </div>
+        </header>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color silicon"></div>
+                <span>Silicon Track</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color virtualization"></div>
+                <span>Virtualization Track</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color security"></div>
+                <span>Security Track</span>
+            </div>
         </div>
-        <div class="legend-item">
-            <span class="legend-color virtualization"></span>
-            <span>Virtualization Track</span>
+
+        <div class="subway-map" id="subwayMap">
+            <svg id="mapSvg" width="100%" height="800">
+                <!-- Tracks will be drawn here -->
+            </svg>
         </div>
-        <div class="legend-item">
-            <span class="legend-color security"></span>
-            <span>Security Track</span>
+
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="modalTitle"></h2>
+                <div id="modalBody"></div>
+            </div>
         </div>
     </div>
-    
-    <div id="subway-map"></div>
-    
-    <div id="station-info" class="station-info hidden">
-        <div class="station-info-header">
-            <h3 id="station-title"></h3>
-            <button id="close-info">&times;</button>
-        </div>
-        <div id="station-content"></div>
-    </div>
-    
+
     <script src="data.js"></script>
     <script src="scripts.js"></script>
 </body>
