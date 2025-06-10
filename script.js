@@ -38,33 +38,37 @@ class SubwayMap {
         this.svg.innerHTML = '';
         
         const tracks = Object.values(learningTracks);
-        const trackHeight = 120;
-        const startX = 50;
-        const stationSpacing = 150;
+        const trackSpacing = 120; // Vertical spacing between tracks
+        const startX = 80;
+        const stationSpacing = 160; // Horizontal spacing between stations
         
         tracks.forEach((track, trackIndex) => {
-            const y = 100 + (trackIndex * trackHeight);
+            const y = 60 + (trackIndex * trackSpacing);
             this.drawTrack(track, startX, y, stationSpacing);
         });
     }
 
     drawTrack(track, startX, y, stationSpacing) {
         const stations = track.stations;
-        const trackLength = (stations.length - 1) * stationSpacing;
+        const maxStations = Math.max(...Object.values(learningTracks).map(t => t.stations.length));
+        const trackLength = (maxStations - 1) * stationSpacing;
         
         // Draw track line
         const trackLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         trackLine.setAttribute('x1', startX);
         trackLine.setAttribute('y1', y);
-        trackLine.setAttribute('x2', startX + trackLength);
+        trackLine.setAttribute('x2', startX + (stations.length - 1) * stationSpacing);
         trackLine.setAttribute('y2', y);
         trackLine.setAttribute('stroke', track.color);
-        trackLine.setAttribute('stroke-width', '6');
+        trackLine.setAttribute('stroke-width', '4');
         trackLine.setAttribute('stroke-linecap', 'round');
         this.svg.appendChild(trackLine);
 
         // Draw direction arrows
-        this.drawArrows(startX, y, trackLength, track.color, stationSpacing);
+        for (let i = 0; i < stations.length - 1; i++) {
+            const arrowX = startX + (i * stationSpacing) + (stationSpacing / 2);
+            this.drawArrow(arrowX, y, track.color);
+        }
 
         // Draw stations
         stations.forEach((station, index) => {
@@ -72,33 +76,25 @@ class SubwayMap {
             this.drawStation(station, x, y, track.color, index === 0, index === stations.length - 1);
         });
 
-        // Draw track label
+        // Draw track label on the left
         const trackLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        trackLabel.setAttribute('x', startX - 30);
+        trackLabel.setAttribute('x', 10);
         trackLabel.setAttribute('y', y + 5);
-        trackLabel.setAttribute('text-anchor', 'end');
+        trackLabel.setAttribute('text-anchor', 'start');
         trackLabel.setAttribute('font-family', 'Arial, sans-serif');
-        trackLabel.setAttribute('font-size', '14');
+        trackLabel.setAttribute('font-size', '12');
         trackLabel.setAttribute('font-weight', 'bold');
         trackLabel.setAttribute('fill', track.color);
         trackLabel.textContent = track.name;
         this.svg.appendChild(trackLabel);
     }
 
-    drawArrows(startX, y, trackLength, color, spacing) {
-        const arrowCount = Math.floor(trackLength / spacing);
-        for (let i = 0; i < arrowCount; i++) {
-            const arrowX = startX + (spacing / 2) + (i * spacing);
-            this.drawArrow(arrowX, y, color);
-        }
-    }
-
     drawArrow(x, y, color) {
         const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-        const points = `${x-5},${y-5} ${x+5},${y} ${x-5},${y+5}`;
+        const points = `${x-6},${y-4} ${x+6},${y} ${x-6},${y+4}`;
         arrow.setAttribute('points', points);
         arrow.setAttribute('fill', color);
-        arrow.setAttribute('opacity', '0.7');
+        arrow.setAttribute('opacity', '0.8');
         this.svg.appendChild(arrow);
     }
 
@@ -107,56 +103,81 @@ class SubwayMap {
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         circle.setAttribute('cx', x);
         circle.setAttribute('cy', y);
-        circle.setAttribute('r', isStart || isEnd ? '12' : '8');
+        circle.setAttribute('r', isStart || isEnd ? '10' : '7');
         circle.setAttribute('fill', 'white');
         circle.setAttribute('stroke', color);
         circle.setAttribute('stroke-width', '3');
         circle.setAttribute('cursor', 'pointer');
+        circle.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))';
         circle.addEventListener('click', () => this.showStationDetails(station));
         this.svg.appendChild(circle);
 
-        // Station label
+        // Station label (only if labels are enabled)
         if (this.showLabels) {
+            const labelGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            labelGroup.setAttribute('cursor', 'pointer');
+            labelGroup.addEventListener('click', () => this.showStationDetails(station));
+            
+            // Background rectangle for better readability
+            const bbox = this.getTextBBox(station.name);
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rect.setAttribute('x', x - bbox.width/2 - 4);
+            rect.setAttribute('y', y - 35);
+            rect.setAttribute('width', bbox.width + 8);
+            rect.setAttribute('height', bbox.height + 4);
+            rect.setAttribute('fill', 'rgba(255,255,255,0.9)');
+            rect.setAttribute('stroke', color);
+            rect.setAttribute('stroke-width', '1');
+            rect.setAttribute('rx', '3');
+            labelGroup.appendChild(rect);
+            
             const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             label.setAttribute('x', x);
-            label.setAttribute('y', y - 20);
+            label.setAttribute('y', y - 25);
             label.setAttribute('text-anchor', 'middle');
             label.setAttribute('font-family', 'Arial, sans-serif');
-            label.setAttribute('font-size', '11');
-            label.setAttribute('font-weight', 'bold');
+            label.setAttribute('font-size', '9');
+            label.setAttribute('font-weight', '600');
             label.setAttribute('fill', '#333');
-            label.setAttribute('cursor', 'pointer');
-            label.addEventListener('click', () => this.showStationDetails(station));
             
-            // Split long station names into multiple lines
+            // Handle long text by breaking it into lines
             const words = station.name.split(' ');
-            if (words.length > 2) {
+            if (words.length > 2 && station.name.length > 15) {
+                const midPoint = Math.ceil(words.length / 2);
+                const firstLine = words.slice(0, midPoint).join(' ');
+                const secondLine = words.slice(midPoint).join(' ');
+                
                 const tspan1 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
                 tspan1.setAttribute('x', x);
                 tspan1.setAttribute('dy', '0');
-                tspan1.textContent = words.slice(0, 2).join(' ');
+                tspan1.textContent = firstLine;
                 label.appendChild(tspan1);
                 
                 const tspan2 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
                 tspan2.setAttribute('x', x);
-                tspan2.setAttribute('dy', '12');
-                tspan2.textContent = words.slice(2).join(' ');
+                tspan2.setAttribute('dy', '10');
+                tspan2.textContent = secondLine;
                 label.appendChild(tspan2);
+                
+                // Adjust rectangle height for two lines
+                rect.setAttribute('height', bbox.height + 14);
+                rect.setAttribute('y', y - 40);
             } else {
                 label.textContent = station.name;
             }
             
-            this.svg.appendChild(label);
+            labelGroup.appendChild(label);
+            this.svg.appendChild(labelGroup);
         }
 
         // Start/End indicators
         if (isStart) {
             const startIndicator = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             startIndicator.setAttribute('x', x);
-            startIndicator.setAttribute('y', y + 35);
+            startIndicator.setAttribute('y', y + 25);
             startIndicator.setAttribute('text-anchor', 'middle');
             startIndicator.setAttribute('font-family', 'Arial, sans-serif');
-            startIndicator.setAttribute('font-size', '10');
+            startIndicator.setAttribute('font-size', '8');
             startIndicator.setAttribute('font-weight', 'bold');
             startIndicator.setAttribute('fill', color);
             startIndicator.textContent = 'START';
@@ -166,14 +187,31 @@ class SubwayMap {
         if (isEnd) {
             const endIndicator = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             endIndicator.setAttribute('x', x);
-            endIndicator.setAttribute('y', y + 35);
+            endIndicator.setAttribute('y', y + 25);
             endIndicator.setAttribute('text-anchor', 'middle');
             endIndicator.setAttribute('font-family', 'Arial, sans-serif');
-            endIndicator.setAttribute('font-size', '10');
+            endIndicator.setAttribute('font-size', '8');
             endIndicator.setAttribute('font-weight', 'bold');
             endIndicator.setAttribute('fill', color);
             endIndicator.textContent = 'END';
             this.svg.appendChild(endIndicator);
+        }
+    }
+
+    getTextBBox(text) {
+        // Approximate width calculation for text
+        const avgCharWidth = 6;
+        const lineHeight = 12;
+        const words = text.split(' ');
+        
+        if (words.length > 2 && text.length > 15) {
+            const midPoint = Math.ceil(words.length / 2);
+            const firstLine = words.slice(0, midPoint).join(' ');
+            const secondLine = words.slice(midPoint).join(' ');
+            const maxWidth = Math.max(firstLine.length, secondLine.length) * avgCharWidth;
+            return { width: maxWidth, height: lineHeight * 2 };
+        } else {
+            return { width: text.length * avgCharWidth, height: lineHeight };
         }
     }
 
@@ -194,7 +232,7 @@ class SubwayMap {
             resourcesHtml += `
                 <li>
                     <strong>${resource.type.toUpperCase()}:</strong> 
-                    <a href="${resource.url}" target="_blank">${resource.title}</a>
+                    <a href="${resource.url}" target="_blank" rel="noopener noreferrer">${resource.title}</a>
                 </li>
             `;
         });
@@ -209,6 +247,7 @@ class SubwayMap {
     }
 
     resetView() {
+        this.showLabels = true;
         this.drawMap();
     }
 }
